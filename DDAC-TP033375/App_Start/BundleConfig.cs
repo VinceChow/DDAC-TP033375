@@ -26,6 +26,7 @@ namespace DDAC_TP033375
 
 			bundles.Add(new StyleBundle("~/Content/css").Include(
 						"~/Content/bootstrap-paper.css",
+						"~/Content/custom-theme.css",
 						"~/Content/site.css",
 						"~/Content/bootstrap-datetimepicker.css"));
 		}
