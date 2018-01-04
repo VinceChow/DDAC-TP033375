@@ -207,12 +207,17 @@
     <Compile Include="Migrations\201801040451198_SeedUsers.Designer.cs">
       <DependentUpon>201801040451198_SeedUsers.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201801040623169_CreateSchedulesTable.cs" />
+    <Compile Include="Migrations\201801040623169_CreateSchedulesTable.Designer.cs">
+      <DependentUpon>201801040623169_CreateSchedulesTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\RoleName.cs" />
+    <Compile Include="Models\Schedule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -312,6 +317,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201801040451198_SeedUsers.resx">
       <DependentUpon>201801040451198_SeedUsers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801040623169_CreateSchedulesTable.resx">
+      <DependentUpon>201801040623169_CreateSchedulesTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
