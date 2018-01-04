@@ -1,12 +1,30 @@
 ﻿@model DDAC_TP033375.Models.Schedule
 
 @{
-	ViewBag.Title = "Create Schedule";
+	ViewBag.Title = "New Schedule";
 }
 
-<h2>Create Schedule</h2>
+@if (ViewBag.IsSuccess != null)
+{
+	if (ViewBag.IsSuccess)
+	{
+		<div class="alert alert-dismissible alert-success">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			@ViewBag.Message
+		</div>
+	}
+	else
+	{
+		<div class="alert alert-dismissible alert-danger">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			@ViewBag.Message
+		</div>
+	}
+}
 
-@using (Html.BeginForm("Save", "Schedules", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+<h2>New Schedule</h2>
+
+@using (Html.BeginForm("Create", "Schedules", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
 	@Html.HiddenFor(s => s.Id)
 	@Html.AntiForgeryToken()
@@ -55,12 +73,14 @@
 				useCurrent: false //Important! See issue #1075
 				//format: "DD/MM/YYYY h:mm A"
 			});
-			$("#departureTimePicker").on("dp.change", function (e) {
-				$('#arrivalTimePicker').data("DateTimePicker").minDate(e.date);
-			});
-			$("#arrivalTimePicker").on("dp.change", function (e) {
-				$('#departureTimePicker').data("DateTimePicker").maxDate(e.date);
-			});
+			$("#departureTimePicker").on("dp.change",
+				function (e) {
+					$('#arrivalTimePicker').data("DateTimePicker").minDate(e.date);
+				});
+			$("#arrivalTimePicker").on("dp.change",
+				function (e) {
+					$('#departureTimePicker').data("DateTimePicker").maxDate(e.date);
+				});
 		});
 	</script>
 }

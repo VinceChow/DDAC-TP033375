@@ -27,7 +27,7 @@ namespace DDAC_TP033375.Controllers
 			throw new NotImplementedException();
 		}
 
-		public ActionResult Create()
+		public ActionResult New()
 		{
 			return View();
 		}
@@ -39,9 +39,66 @@ namespace DDAC_TP033375.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Save(Schedule schedule)
+		public ActionResult Create([Bind(Exclude = "Id")] Schedule schedule)
 		{
-			throw new NotImplementedException();
+			if (!ModelState.IsValid)
+			{
+				return View("New");
+			}
+
+			_context.Schedules.Add(schedule);
+
+			try
+			{
+				_context.SaveChanges();
+
+				ViewBag.IsSuccess = true;
+				ViewBag.Message = "Schedule has been created successfully.";
+				ModelState.Clear();
+			}
+			catch (Exception ex)
+			{
+				ViewBag.IsSuccess = false;
+				ViewBag.Message = ex.Message;
+				ModelState.Remove("DepartureTime");
+				ModelState.Remove("ArrivalTime");
+			}
+
+			return View("New");
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult Update(Schedule schedule)
+		{
+			if (!ModelState.IsValid)
+			{
+				return View("New");
+			}
+
+			//	var scheduleInDb = _context.Schedules.Single(s => s.Id == schedule.Id);
+			//	scheduleInDb.Origin = schedule.Origin;
+			//	scheduleInDb.Destination = schedule.Destination;
+			//	scheduleInDb.DepartureTime = schedule.DepartureTime;
+			//	scheduleInDb.ArrivalTime = schedule.ArrivalTime;
+
+			//try
+			//{
+			//	_context.SaveChanges();
+			//	ViewBag.IsSuccess = true;
+			//	ViewBag.Message = "Schedule has been created successfully.";
+			//	return View("Create");
+			//}
+			//catch (Exception ex)
+			//{
+			//	ViewBag.IsSuccess = false;
+			//	ViewBag.Message = ex.Message;
+			//	return View("Create");
+			//}
+
+			ViewBag.IsSuccess = true;
+			ViewBag.Message = "Schedule has been created successfully.";
+			return View("New");
 		}
 
 		[HttpDelete]
