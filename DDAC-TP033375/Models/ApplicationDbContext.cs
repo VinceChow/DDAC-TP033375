@@ -10,6 +10,7 @@ namespace DDAC_TP033375.Models
 	public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 	{
 		public DbSet<Schedule> Schedules { get; set; }
+		public DbSet<Ship> Ships { get; set; }
 
 		public ApplicationDbContext()
 			: base("DefaultConnection", throwIfV1Schema: false)
