@@ -199,6 +199,10 @@
     <Compile Include="Migrations\201801040421503_InitialMigration.Designer.cs">
       <DependentUpon>201801040421503_InitialMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201801040433423_AddNameAndCompanyNameToUser.cs" />
+    <Compile Include="Migrations\201801040433423_AddNameAndCompanyNameToUser.Designer.cs">
+      <DependentUpon>201801040433423_AddNameAndCompanyNameToUser.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
@@ -297,6 +301,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201801040421503_InitialMigration.resx">
       <DependentUpon>201801040421503_InitialMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801040433423_AddNameAndCompanyNameToUser.resx">
+      <DependentUpon>201801040433423_AddNameAndCompanyNameToUser.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
