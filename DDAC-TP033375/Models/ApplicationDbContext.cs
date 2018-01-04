@@ -11,6 +11,7 @@ namespace DDAC_TP033375.Models
 	{
 		public DbSet<Schedule> Schedules { get; set; }
 		public DbSet<Ship> Ships { get; set; }
+		public DbSet<Customer> Customers { get; set; }
 
 		public ApplicationDbContext()
 			: base("DefaultConnection", throwIfV1Schema: false)
