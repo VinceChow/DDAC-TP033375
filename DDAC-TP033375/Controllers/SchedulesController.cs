@@ -19,12 +19,19 @@ namespace DDAC_TP033375.Controllers
 		// GET: Schedules
 		public ActionResult Index()
 		{
-			return View();
+			var schedules = _context.Schedules.ToList();
+
+			return View(schedules);
 		}
 
 		public ActionResult Details(int id)
 		{
-			throw new NotImplementedException();
+			var schedule = _context.Schedules.SingleOrDefault(s => s.Id == id);
+
+			if (schedule == null)
+				return HttpNotFound();
+
+			return PartialView("_Details", schedule);
 		}
 
 		public ActionResult New()

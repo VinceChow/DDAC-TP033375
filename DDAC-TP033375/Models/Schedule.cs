@@ -19,11 +19,11 @@ namespace DDAC_TP033375.Models
 		public string Destination { get; set; }
 
 		[Required]
-		[Display(Name = "Departure Time")]
+		[Display(Name = "Departure Time (mm/dd/yyyy)")]
 		public DateTime DepartureTime { get; set; }
 
 		[Required]
-		[Display(Name = "Arrival Time")]
+		[Display(Name = "Arrival Time (mm/dd/yyyy)")]
 		public DateTime ArrivalTime { get; set; }
 	}
 }

@@ -1,0 +1,29 @@
+﻿@model DDAC_TP033375.Models.Schedule
+
+<div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	<h4 class="modal-title" id="myModalLabel">Schedule Details</h4>
+</div>
+<div class="modal-body">
+	<div class="row">
+		<div class="col-xs-5" style="text-align: right"><strong>@Html.DisplayNameFor(model => model.Origin)</strong></div>
+		<div class="col-xs-7">@Html.DisplayFor(model => model.Origin)</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-5" style="text-align: right"><strong>@Html.DisplayNameFor(model => model.Destination)</strong></div>
+		<div class="col-xs-7">@Html.DisplayFor(model => model.Destination)</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-5" style="text-align: right"><strong>@Html.DisplayNameFor(model => model.DepartureTime)</strong></div>
+		<div class="col-xs-7">@Html.DisplayFor(model => model.DepartureTime)</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-5" style="text-align: right"><strong>@Html.DisplayNameFor(model => model.ArrivalTime)</strong></div>
+		<div class="col-xs-7">@Html.DisplayFor(model => model.ArrivalTime)</div>
+	</div>
+</div>
+<div class="modal-footer">
+	<button type="button" class="btn btn-default" data-dismiss="modal">Back to List</button>
+	@Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-warning" })
+	@Html.ActionLink("Delete", "Delete", new { id = Model.Id }, new { @class = "btn btn-danger" })
+</div>
