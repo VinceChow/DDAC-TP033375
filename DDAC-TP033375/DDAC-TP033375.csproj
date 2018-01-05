@@ -322,7 +322,7 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\_NavBar.cshtml" />
     <Content Include="Views\Schedules\Index.cshtml" />
-    <Content Include="Views\Schedules\New.cshtml" />
+    <Content Include="Views\Schedules\ScheduleForm.cshtml" />
     <Content Include="Views\Schedules\_Details.cshtml" />
   </ItemGroup>
   <ItemGroup>

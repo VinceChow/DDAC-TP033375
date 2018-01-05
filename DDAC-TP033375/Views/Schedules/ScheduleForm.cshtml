@@ -1,7 +1,7 @@
 ﻿@model DDAC_TP033375.Models.Schedule
 
 @{
-	ViewBag.Title = "New Schedule";
+	@*@ViewBag.Title*@
 }
 
 @if (ViewBag.IsSuccess != null)
@@ -24,7 +24,7 @@
 
 <h2>New Schedule</h2>
 
-@using (Html.BeginForm("Create", "Schedules", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+@using (Html.BeginForm((string)@ViewBag.Action, "Schedules", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
 	@Html.HiddenFor(s => s.Id)
 	@Html.AntiForgeryToken()
@@ -44,18 +44,20 @@
 	<div class="form-group">
 		@Html.LabelFor(s => s.DepartureTime, new { @class = "col-md-2 control-label" })
 		<div class="col-md-10">
-			@Html.TextBoxFor(s => s.DepartureTime, "{MM/dd/yyyy h:mm tt}", new { id = "departureTimePicker", @class = "form-control" })
+			@Html.TextBoxFor(s => s.DepartureTime, new { id = "departureTimePicker", @class = "form-control" })
+			@*@Html.TextBoxFor(s => s.DepartureTime, "{MM/dd/yyyy h:mm tt}", new { id = "departureTimePicker", @class = "form-control" })*@
 		</div>
 	</div>
 	<div class="form-group">
 		@Html.LabelFor(s => s.ArrivalTime, new { @class = "col-md-2 control-label" })
 		<div class="col-md-10">
-			@Html.TextBoxFor(s => s.ArrivalTime, "{MM/dd/yyyy h:mm tt}", new { id = "arrivalTimePicker", @class = "form-control" })
+			@Html.TextBoxFor(s => s.ArrivalTime, new { id = "arrivalTimePicker", @class = "form-control" })
+			@*@Html.TextBoxFor(s => s.ArrivalTime, "{MM/dd/yyyy h:mm tt}", new { id = "arrivalTimePicker", @class = "form-control" })*@
 		</div>
 	</div>
 	<div class="form-group">
 		<div class="col-md-offset-2 col-md-10">
-			<input type="submit" class="btn btn-default" value="Register" />
+			<input type="submit" class="btn btn-success" value="@ViewBag.Action" />
 		</div>
 	</div>
 }

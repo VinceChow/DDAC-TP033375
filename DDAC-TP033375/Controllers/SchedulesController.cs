@@ -36,12 +36,23 @@ namespace DDAC_TP033375.Controllers
 
 		public ActionResult New()
 		{
-			return View();
+			ViewBag.Title = "New Schedule";
+			ViewBag.Action = "Create";
+
+			return View("ScheduleForm");
 		}
 
 		public ActionResult Edit(int id)
 		{
-			throw new NotImplementedException();
+			var schedule = _context.Schedules.SingleOrDefault(s => s.Id == id);
+
+			if (schedule == null)
+				return HttpNotFound();
+
+			ViewBag.Title = "Edit Schedule";
+			ViewBag.Action = "Update";
+
+			return View("ScheduleForm", schedule);
 		}
 
 		[HttpPost]
@@ -50,7 +61,7 @@ namespace DDAC_TP033375.Controllers
 		{
 			if (!ModelState.IsValid)
 			{
-				return View("New");
+				return View("ScheduleForm");
 			}
 
 			_context.Schedules.Add(schedule);
@@ -66,12 +77,12 @@ namespace DDAC_TP033375.Controllers
 			catch (Exception ex)
 			{
 				ViewBag.IsSuccess = false;
-				ViewBag.Message = ex.Message;
+				ViewBag.Message = "Create Failed.\nError: " + ex.Message;
 				ModelState.Remove("DepartureTime");
 				ModelState.Remove("ArrivalTime");
 			}
 
-			return View("New");
+			return View("ScheduleForm");
 		}
 
 		[HttpPost]
@@ -80,32 +91,32 @@ namespace DDAC_TP033375.Controllers
 		{
 			if (!ModelState.IsValid)
 			{
-				return View("New");
+				return View("ScheduleForm");
 			}
 
-			//	var scheduleInDb = _context.Schedules.Single(s => s.Id == schedule.Id);
-			//	scheduleInDb.Origin = schedule.Origin;
-			//	scheduleInDb.Destination = schedule.Destination;
-			//	scheduleInDb.DepartureTime = schedule.DepartureTime;
-			//	scheduleInDb.ArrivalTime = schedule.ArrivalTime;
+			var scheduleInDb = _context.Schedules.Single(s => s.Id == schedule.Id);
+			scheduleInDb.Origin = schedule.Origin;
+			scheduleInDb.Destination = schedule.Destination;
+			scheduleInDb.DepartureTime = schedule.DepartureTime;
+			scheduleInDb.ArrivalTime = schedule.ArrivalTime;
 
-			//try
-			//{
-			//	_context.SaveChanges();
-			//	ViewBag.IsSuccess = true;
-			//	ViewBag.Message = "Schedule has been created successfully.";
-			//	return View("Create");
-			//}
-			//catch (Exception ex)
-			//{
-			//	ViewBag.IsSuccess = false;
-			//	ViewBag.Message = ex.Message;
-			//	return View("Create");
-			//}
+			try
+			{
+				_context.SaveChanges();
 
-			ViewBag.IsSuccess = true;
-			ViewBag.Message = "Schedule has been created successfully.";
-			return View("New");
+				ViewBag.IsSuccess = true;
+				ViewBag.Message = "Schedule has been updated successfully.";
+				ModelState.Clear();
+			}
+			catch (Exception ex)
+			{
+				ViewBag.IsSuccess = false;
+				ViewBag.Message = "Update Failed.\nError: " + ex.Message;
+				ModelState.Remove("DepartureTime");
+				ModelState.Remove("ArrivalTime");
+			}
+
+			return View("ScheduleForm");
 		}
 
 		[HttpDelete]
