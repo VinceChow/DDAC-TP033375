@@ -104,14 +104,14 @@
 									if (response != null && response.success) {
 										button.parents("tr").remove();
 										//table.row(button.parents("tr")).remove().draw();
-										alert(response.responseText);
+										toastr.success(response.responseText);
 									} else {
 										// DoSomethingElse()
-										alert(response.responseText);
+										toastr.error(response.responseText);
 									}                          
 								},
 								error: function (response) {
-									alert("error!");
+									toastr.error("ERROR!");
 								}
 							});
 						}
