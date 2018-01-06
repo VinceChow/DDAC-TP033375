@@ -1,5 +1,4 @@
-﻿@using System.Web.UI.WebControls
-@model IEnumerable<DDAC_TP033375.Models.Schedule>
+﻿@model IEnumerable<DDAC_TP033375.Models.Schedule>
 
 @{
 	ViewBag.Title = "Index";
@@ -108,7 +107,7 @@
 									} else {
 										// DoSomethingElse()
 										toastr.error(response.responseText);
-									}                          
+									}
 								},
 								error: function (response) {
 									toastr.error("ERROR!");

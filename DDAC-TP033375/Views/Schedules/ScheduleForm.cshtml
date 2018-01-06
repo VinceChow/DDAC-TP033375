@@ -1,7 +1,7 @@
 ﻿@model DDAC_TP033375.Models.Schedule
 
 @{
-	@*@ViewBag.Title*@
+	//ViewBag.Title = @ViewBag.Title;
 }
 
 @if (ViewBag.IsSuccess != null)
@@ -10,7 +10,7 @@
 	{
 		<div class="alert alert-dismissible alert-success">
 			<button type="button" class="close" data-dismiss="alert">&times;</button>
-			@ViewBag.Message
+			@ViewBag.Message @Html.ActionLink("Go to Schedule Index", "Index", "", new { @class = "alert-link" })
 		</div>
 	}
 	else
