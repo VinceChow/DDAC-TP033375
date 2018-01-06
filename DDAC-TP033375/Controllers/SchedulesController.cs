@@ -123,7 +123,7 @@ namespace DDAC_TP033375.Controllers
 			return View("ScheduleForm");
 		}
 
-		[HttpDelete]
+		[HttpPost]
 		public ActionResult Delete(int id)
 		{
 			var scheduleInDb = _context.Schedules.Single(s => s.Id == id);
@@ -137,16 +137,12 @@ namespace DDAC_TP033375.Controllers
 			{
 				_context.SaveChanges();
 
-				ViewBag.IsSuccess = true;
-				ViewBag.Message = "Schedule has been deleted successfully.";
+				return Json(new { success = true, responseText = "Schedule has been deleted successfully." }, JsonRequestBehavior.AllowGet);
 			}
 			catch (Exception ex)
 			{
-				ViewBag.IsSuccess = false;
-				ViewBag.Message = "Delete Failed.\nError: " + ex.Message;
+				return Json(new { success = false, responseText = "Delete Failed.\nError: " + ex.Message }, JsonRequestBehavior.AllowGet);
 			}
-
-			return View("Index");
 		}
 	}
 }

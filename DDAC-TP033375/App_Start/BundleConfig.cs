@@ -14,7 +14,10 @@ namespace DDAC_TP033375
 						"~/Scripts/respond.js",
 						// Bootstrap 3 DateTimePicker
 						"~/Scripts/moment.min.js",
-						"~/Scripts/bootstrap-datetimepicker.js"));
+						"~/Scripts/bootstrap-datetimepicker.js",
+						// Bootbox (http://bootboxjs.com/)
+						"~/Scripts/bootbox.js",
+						"~/Scripts/respond.js"));
 
 			bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
 						"~/Scripts/jquery.validate*"));
