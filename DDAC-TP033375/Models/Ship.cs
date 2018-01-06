@@ -24,5 +24,7 @@ namespace DDAC_TP033375.Models
 		public int NumberOfAvailableContainerBay { get; set; }
 
 		public Schedule Schedule { get; set; }
+
+		public Boolean ScheduleAvailability { get; set; }
 	}
 }

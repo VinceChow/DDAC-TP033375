@@ -228,6 +228,10 @@
     <Compile Include="Migrations\201801040630358_CreateBookingsTable.Designer.cs">
       <DependentUpon>201801040630358_CreateBookingsTable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201801060922173_AddScheduleAvailabilityToShip.cs" />
+    <Compile Include="Migrations\201801060922173_AddScheduleAvailabilityToShip.Designer.cs">
+      <DependentUpon>201801060922173_AddScheduleAvailabilityToShip.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
@@ -364,6 +368,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201801040630358_CreateBookingsTable.resx">
       <DependentUpon>201801040630358_CreateBookingsTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801060922173_AddScheduleAvailabilityToShip.resx">
+      <DependentUpon>201801060922173_AddScheduleAvailabilityToShip.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
