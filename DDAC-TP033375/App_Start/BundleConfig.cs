@@ -17,7 +17,9 @@ namespace DDAC_TP033375
 						"~/Scripts/bootstrap-datetimepicker.js",
 						// Bootbox (http://bootboxjs.com/)
 						"~/Scripts/bootbox.js",
-						"~/Scripts/respond.js"));
+						"~/Scripts/respond.js",
+						// toastr
+						"~/Scripts/toastr.js"));
 
 			bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
 						"~/Scripts/jquery.validate*"));
@@ -31,7 +33,8 @@ namespace DDAC_TP033375
 						"~/Content/bootstrap-paper.css",
 						"~/Content/custom-theme.css",
 						"~/Content/site.css",
-						"~/Content/bootstrap-datetimepicker.css"));
+						"~/Content/bootstrap-datetimepicker.css",
+						"~/Content/toastr.css"));
 		}
 	}
 }
