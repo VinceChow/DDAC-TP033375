@@ -95,6 +95,10 @@ namespace DDAC_TP033375.Controllers
 			}
 
 			var scheduleInDb = _context.Schedules.Single(s => s.Id == schedule.Id);
+
+			if (scheduleInDb == null)
+				return HttpNotFound();
+
 			scheduleInDb.Origin = schedule.Origin;
 			scheduleInDb.Destination = schedule.Destination;
 			scheduleInDb.DepartureTime = schedule.DepartureTime;
@@ -122,7 +126,27 @@ namespace DDAC_TP033375.Controllers
 		[HttpDelete]
 		public ActionResult Delete(int id)
 		{
-			throw new NotImplementedException();
+			var scheduleInDb = _context.Schedules.Single(s => s.Id == id);
+
+			if (scheduleInDb == null)
+				return HttpNotFound();
+
+			_context.Schedules.Remove(scheduleInDb);
+
+			try
+			{
+				_context.SaveChanges();
+
+				ViewBag.IsSuccess = true;
+				ViewBag.Message = "Schedule has been deleted successfully.";
+			}
+			catch (Exception ex)
+			{
+				ViewBag.IsSuccess = false;
+				ViewBag.Message = "Delete Failed.\nError: " + ex.Message;
+			}
+
+			return View("Index");
 		}
 	}
 }
