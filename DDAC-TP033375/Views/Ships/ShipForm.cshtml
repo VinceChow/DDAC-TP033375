@@ -1,0 +1,139 @@
+﻿@model DDAC_TP033375.ViewModels.ShipFormViewModel
+
+@{
+	ViewBag.Title = ViewBag.Title;
+}
+
+@if (ViewBag.IsSuccess != null)
+{
+	if (ViewBag.IsSuccess)
+	{
+		<div class="alert alert-dismissible alert-success">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			@ViewBag.Message @Html.ActionLink("Go to Ship Index", "Index", "", new { @class = "alert-link" })
+		</div>
+	}
+	else
+	{
+		<div class="alert alert-dismissible alert-danger">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			@ViewBag.Message
+		</div>
+	}
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm((string)@ViewBag.Action, "Ships", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+	@Html.HiddenFor(s => s.Ship.Id)
+	@Html.AntiForgeryToken()
+	@Html.ValidationSummary("", new { @class = "text-danger" })
+	<div class="form-group">
+		@Html.LabelFor(s => s.Ship.Name, new { @class = "col-md-2 control-label" })
+		<div class="col-md-10">
+			@Html.TextBoxFor(s => s.Ship.Name, new { @class = "form-control" })
+		</div>
+	</div>
+	<div class="form-group">
+		@Html.LabelFor(s => s.Ship.NumberOfContainerBay, new { @class = "col-md-2 control-label" })
+		<div class="col-md-10">
+			@Html.TextBoxFor(s => s.Ship.NumberOfContainerBay, new { @class = "form-control" })
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-md-2 control-label" for="Ship_Schedule_Origin">Origin</label>
+		<div class="col-md-10">
+			@Html.DropDownListFor(s => s.Ship.Schedule.Origin,
+				new SelectList(Model.Schedules, "Id", "Origin"),
+				"-- From --", new { @class = "form-control", @onchange = "FillDestination()" })
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-md-2 control-label" for="Ship_Schedule_Destination">Destination</label>
+		<div class="col-md-10">
+			@Html.DropDownListFor(s => s.Ship.Schedule.Destination,
+				new SelectList(Enumerable.Empty<SelectListItem>(), "Id", "Destination"),
+				"-- To --", new { @class = "form-control", @onchange = "FillTime()" })
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-md-2 control-label" for="Ship_ScheduleId">Departure Time (MM/DD/YYYY)</label>
+		<div class="col-md-10">
+			@Html.DropDownListFor(s => s.Ship.ScheduleId,
+				new SelectList(Enumerable.Empty<SelectListItem>(), "Id", "DepartureTime"),
+				"-- Time Available --", new { @class = "form-control" })
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="col-md-offset-2 col-md-10">
+			<input type="submit" class="btn btn-success" value="@ViewBag.Action" />
+		</div>
+	</div>
+}
+
+@section Scripts {
+	@Scripts.Render("~/bundles/jqueryval")
+
+	<script>
+		function FillDestination() {
+			var origin = $('#Ship_Schedule_Origin :selected').text();
+			$.ajax({
+				url: '@Url.Action("FillDestination")',
+				type: "GET",
+				dataType: "JSON",
+				data: { origin: origin },
+				success: function (destinations) {
+					$("#Ship_Schedule_Destination").html("").append(
+						$('<option></option>').val('').html("-- To --")); // clear before appending new list
+					$.each(destinations, function (i, destination) {
+						$("#Ship_Schedule_Destination").append(
+							$('<option></option>').val(destination.Id).html(destination.Destination));
+					});
+				}
+			});
+		}
+
+		function FillTime() {
+			var origin = $('#Ship_Schedule_Origin :selected').text();
+			var destination = $('#Ship_Schedule_Destination :selected').text();
+			$.ajax({
+				url: '@Url.Action("FillTime")',
+				type: "GET",
+				dataType: "JSON",
+				data: {
+					origin: origin,
+					destination: destination
+				},
+				success: function (schedules) {
+					$("#Ship_ScheduleId").html("").append(
+						$('<option></option>').val('').html("-- Time Available --")); // clear before appending new list
+					$.each(schedules, function (i, schedule) {
+						$("#Ship_ScheduleId").append(
+							$('<option></option>').val(schedule.Id).html(JsonToJSTime(schedule.DepartureTime)));
+					});
+				}
+			});
+		}
+
+		function JsonToJSTime(jsonDateTime) {
+			var jsDate = new Date(jsonDateTime.match(/\d+/)[0] * 1); // Convert json to javascript datetime format
+
+			var date = jsDate.getDate();
+			var month = jsDate.getMonth() + 1;
+			var hours = jsDate.getHours();
+			var minutes = jsDate.getMinutes();
+			var ampm = hours >= 12 ? 'PM' : 'AM';
+
+			date = date < 10 ? '0' + date : date; // the date 0-9 should be 01-09
+			month = month < 10 ? '0' + month : month; // the month 0-9 should be 01-09
+			hours = hours % 12;
+			hours = hours ? hours : 12; // the hour '0' should be '12'
+			minutes = minutes < 10 ? '0' + minutes : minutes;
+
+			var strTime = hours + ':' + minutes + ' ' + ampm;
+
+			return month + "/" + date + "/" + jsDate.getFullYear() + "  " + strTime;
+		}
+	</script>
+}

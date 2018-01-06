@@ -16,6 +16,11 @@ namespace DDAC_TP033375.Controllers
 			_context = new ApplicationDbContext();
 		}
 
+		protected override void Dispose(bool disposing)
+		{
+			_context.Dispose();
+		}
+
 		// GET: Schedules
 		public ActionResult Index()
 		{
@@ -144,5 +149,6 @@ namespace DDAC_TP033375.Controllers
 				return Json(new { success = false, responseText = "Delete Failed.\nError: " + ex.Message }, JsonRequestBehavior.AllowGet);
 			}
 		}
+
 	}
 }

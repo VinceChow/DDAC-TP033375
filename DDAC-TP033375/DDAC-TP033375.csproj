@@ -193,6 +193,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\SchedulesController.cs" />
+    <Compile Include="Controllers\ShipsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -232,6 +233,14 @@
     <Compile Include="Migrations\201801060922173_AddScheduleAvailabilityToShip.Designer.cs">
       <DependentUpon>201801060922173_AddScheduleAvailabilityToShip.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201801061719163_AddScheduleIdToShip.cs" />
+    <Compile Include="Migrations\201801061719163_AddScheduleIdToShip.Designer.cs">
+      <DependentUpon>201801061719163_AddScheduleIdToShip.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801061741528_RemoveScheduleAvailabilityFromShip.cs" />
+    <Compile Include="Migrations\201801061741528_RemoveScheduleAvailabilityFromShip.Designer.cs">
+      <DependentUpon>201801061741528_RemoveScheduleAvailabilityFromShip.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
@@ -245,6 +254,7 @@
     <Compile Include="Models\Ship.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\ShipFormViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-datetimepicker.css" />
@@ -336,6 +346,8 @@
     <Content Include="Views\Schedules\Index.cshtml" />
     <Content Include="Views\Schedules\ScheduleForm.cshtml" />
     <Content Include="Views\Schedules\_Details.cshtml" />
+    <Content Include="Views\Ships\Index.cshtml" />
+    <Content Include="Views\Ships\ShipForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -371,6 +383,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201801060922173_AddScheduleAvailabilityToShip.resx">
       <DependentUpon>201801060922173_AddScheduleAvailabilityToShip.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801061719163_AddScheduleIdToShip.resx">
+      <DependentUpon>201801061719163_AddScheduleIdToShip.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801061741528_RemoveScheduleAvailabilityFromShip.resx">
+      <DependentUpon>201801061741528_RemoveScheduleAvailabilityFromShip.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

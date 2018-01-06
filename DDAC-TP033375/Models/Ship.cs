@@ -16,7 +16,7 @@ namespace DDAC_TP033375.Models
 		public string Name { get; set; }
 
 		[Required]
-		[Range(10, Double.MaxValue)]
+		[Range(10, 1000)]
 		[Display(Name = "Number of Container Bay")]
 		public int NumberOfContainerBay { get; set; }
 
@@ -25,6 +25,7 @@ namespace DDAC_TP033375.Models
 
 		public Schedule Schedule { get; set; }
 
-		public Boolean ScheduleAvailability { get; set; }
+		[Required]
+		public int ScheduleId { get; set; }
 	}
 }
