@@ -71,6 +71,11 @@ namespace DDAC_TP033375.Controllers
 
 			if (!ModelState.IsValid)
 			{
+				ViewBag.Title = "New Ship";
+				ViewBag.Action = "Create";
+				ViewBag.IsSuccess = false;
+				ViewBag.Message = "Create Failed.";
+
 				return View("ShipForm", viewModel);
 			}
 
@@ -84,12 +89,16 @@ namespace DDAC_TP033375.Controllers
 			{
 				_context.SaveChanges();
 
+				ViewBag.Title = "New Ship";
+				ViewBag.Action = "Create";
 				ViewBag.IsSuccess = true;
 				ViewBag.Message = "Ship has been added successfully.";
 				ModelState.Clear();
 			}
 			catch (Exception ex)
 			{
+				ViewBag.Title = "New Ship";
+				ViewBag.Action = "Create";
 				ViewBag.IsSuccess = false;
 				ViewBag.Message = "Fail to add ship.\nError: " + ex.Message;
 			}
@@ -101,15 +110,20 @@ namespace DDAC_TP033375.Controllers
 		[ValidateAntiForgeryToken]
 		public ActionResult Update(Ship ship)
 		{
-			if (!ModelState.IsValid)
-			{
-				return View("ShipForm");
-			}
-
 			var shipInDb = _context.Ships.Include(s => s.Schedule).Single(s => s.Id == ship.Id);
 
 			if (shipInDb == null)
 				return HttpNotFound();
+
+			if (!ModelState.IsValid)
+			{
+				ViewBag.Title = "Edit Ship";
+				ViewBag.Action = "Update";
+				ViewBag.IsSuccess = false;
+				ViewBag.Message = "Update Failed.";
+
+				return View("ShipForm", ExistingShipFormViewModel(shipInDb));
+			}
 
 			// Validate Number of in used Container Bays
 
@@ -117,10 +131,12 @@ namespace DDAC_TP033375.Controllers
 
 			if (ship.NumberOfContainerBay < numberOfUnavailableContainerBay)
 			{
+				ViewBag.Title = "Edit Ship";
+				ViewBag.Action = "Update";
 				ViewBag.IsSuccess = false;
 				ViewBag.Message = "Update Failed.\nError: This ship currently has " + numberOfUnavailableContainerBay + " container bays in used.";
 
-				return View("ShipForm");
+				return View("ShipForm", ExistingShipFormViewModel(shipInDb));
 			}
 
 			// END OF VALIDATION
@@ -129,23 +145,29 @@ namespace DDAC_TP033375.Controllers
 			shipInDb.NumberOfAvailableContainerBay += ship.NumberOfContainerBay - shipInDb.NumberOfContainerBay;
 			shipInDb.NumberOfContainerBay = ship.NumberOfContainerBay;
 			shipInDb.ScheduleId = ship.ScheduleId;
-			shipInDb.IsScheduled = ship.IsScheduled;
+			shipInDb.IsScheduled = true;
 
 			try
 			{
 				_context.SaveChanges();
 
+				ViewBag.Title = "Edit Ship";
+				ViewBag.Action = "Update";
 				ViewBag.IsSuccess = true;
 				ViewBag.Message = "Ship has been updated successfully.";
 				ModelState.Clear();
 			}
 			catch (Exception ex)
 			{
+				ViewBag.Title = "Edit Ship";
+				ViewBag.Action = "Update";
 				ViewBag.IsSuccess = false;
 				ViewBag.Message = "Update Failed.\nError: " + ex.Message;
 			}
 
-			return View("ShipForm");
+			var newShipInDb = _context.Ships.Include(s => s.Schedule).Single(s => s.Id == ship.Id);
+
+			return View("ShipForm", ExistingShipFormViewModel(newShipInDb));
 		}
 
 		[HttpPost]

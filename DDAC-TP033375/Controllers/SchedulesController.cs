@@ -66,6 +66,11 @@ namespace DDAC_TP033375.Controllers
 		{
 			if (!ModelState.IsValid)
 			{
+				ViewBag.Title = "New Schedule";
+				ViewBag.Action = "Create";
+				ViewBag.IsSuccess = false;
+				ViewBag.Message = "Create Failed.";
+
 				return View("ScheduleForm");
 			}
 
@@ -75,12 +80,16 @@ namespace DDAC_TP033375.Controllers
 			{
 				_context.SaveChanges();
 
+				ViewBag.Title = "New Schedule";
+				ViewBag.Action = "Create";
 				ViewBag.IsSuccess = true;
 				ViewBag.Message = "Schedule has been created successfully.";
 				ModelState.Clear();
 			}
 			catch (Exception ex)
 			{
+				ViewBag.Title = "New Schedule";
+				ViewBag.Action = "Create";
 				ViewBag.IsSuccess = false;
 				ViewBag.Message = "Create Failed.\nError: " + ex.Message;
 				ModelState.Remove("DepartureTime");
@@ -94,15 +103,20 @@ namespace DDAC_TP033375.Controllers
 		[ValidateAntiForgeryToken]
 		public ActionResult Update(Schedule schedule)
 		{
-			if (!ModelState.IsValid)
-			{
-				return View("ScheduleForm");
-			}
-
 			var scheduleInDb = _context.Schedules.Single(s => s.Id == schedule.Id);
 
 			if (scheduleInDb == null)
 				return HttpNotFound();
+
+			if (!ModelState.IsValid)
+			{
+				ViewBag.Title = "Edit Schedule";
+				ViewBag.Action = "Update";
+				ViewBag.IsSuccess = false;
+				ViewBag.Message = "Update Failed.";
+
+				return View("ScheduleForm", scheduleInDb);
+			}
 
 			scheduleInDb.Origin = schedule.Origin;
 			scheduleInDb.Destination = schedule.Destination;
@@ -113,19 +127,25 @@ namespace DDAC_TP033375.Controllers
 			{
 				_context.SaveChanges();
 
+				ViewBag.Title = "Edit Schedule";
+				ViewBag.Action = "Update";
 				ViewBag.IsSuccess = true;
 				ViewBag.Message = "Schedule has been updated successfully.";
 				ModelState.Clear();
 			}
 			catch (Exception ex)
 			{
+				ViewBag.Title = "Edit Schedule";
+				ViewBag.Action = "Update";
 				ViewBag.IsSuccess = false;
 				ViewBag.Message = "Update Failed.\nError: " + ex.Message;
 				ModelState.Remove("DepartureTime");
 				ModelState.Remove("ArrivalTime");
 			}
 
-			return View("ScheduleForm");
+			var newScheduleInDb = _context.Schedules.Single(s => s.Id == schedule.Id);
+
+			return View("ScheduleForm", newScheduleInDb);
 		}
 
 		[HttpPost]
