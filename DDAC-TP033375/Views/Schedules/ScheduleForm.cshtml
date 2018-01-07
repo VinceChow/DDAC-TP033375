@@ -2,6 +2,7 @@
 
 @{
 	ViewBag.Title = ViewBag.Title;
+	var columnWidth = ViewBag.Action.Equals("Update") ? "col-md-6" : "col-md-8";
 }
 
 @if (ViewBag.IsSuccess != null)
@@ -24,43 +25,77 @@
 
 <h2>@ViewBag.Title</h2>
 
-@using (Html.BeginForm((string)@ViewBag.Action, "Schedules", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-{
-	@Html.HiddenFor(s => s.Id)
-	@Html.AntiForgeryToken()
-	@Html.ValidationSummary("", new { @class = "text-danger" })
-	<div class="form-group">
-		@Html.LabelFor(s => s.Origin, new { @class = "col-md-2 control-label" })
-		<div class="col-md-10">
-			@Html.TextBoxFor(s => s.Origin, new { @class = "form-control" })
-		</div>
+<div class="row">
+	<div class="@columnWidth">
+		@using (Html.BeginForm((string)@ViewBag.Action, "Schedules", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+		{
+			<div class="well">
+				@Html.HiddenFor(s => s.Id)
+				@Html.AntiForgeryToken()
+				@Html.ValidationSummary("", new { @class = "text-danger" })
+				<div class="form-group">
+					@Html.LabelFor(s => s.Origin, new { @class = "col-md-5 control-label" })
+					<div class="col-md-7">
+						@Html.TextBoxFor(s => s.Origin, new { @class = "form-control" })
+					</div>
+				</div>
+				<div class="form-group">
+					@Html.LabelFor(s => s.Destination, new { @class = "col-md-5 control-label" })
+					<div class="col-md-7">
+						@Html.TextBoxFor(s => s.Destination, new { @class = "form-control" })
+					</div>
+				</div>
+				<div class="form-group">
+					@Html.LabelFor(s => s.DepartureTime, new { @class = "col-md-5 control-label" })
+					<div class="col-md-7">
+						@Html.TextBoxFor(s => s.DepartureTime, new { id = "departureTimePicker", @class = "form-control" })
+						@*@Html.TextBoxFor(s => s.DepartureTime, "{MM/dd/yyyy h:mm tt}", new { id = "departureTimePicker", @class = "form-control" })*@
+					</div>
+				</div>
+				<div class="form-group">
+					@Html.LabelFor(s => s.ArrivalTime, new { @class = "col-md-5 control-label" })
+					<div class="col-md-7">
+						@Html.TextBoxFor(s => s.ArrivalTime, new { id = "arrivalTimePicker", @class = "form-control" })
+						@*@Html.TextBoxFor(s => s.ArrivalTime, "{MM/dd/yyyy h:mm tt}", new { id = "arrivalTimePicker", @class = "form-control" })*@
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-md-offset-5 col-md-7">
+						<input type="submit" class="btn btn-success" value="@ViewBag.Action" />
+					</div>
+				</div>
+			</div>
+		}
 	</div>
-	<div class="form-group">
-		@Html.LabelFor(s => s.Destination, new { @class = "col-md-2 control-label" })
-		<div class="col-md-10">
-			@Html.TextBoxFor(s => s.Destination, new { @class = "form-control" })
+	@if (ViewBag.Action.Equals("Update"))
+	{
+		<div class="col-md-6">
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h3 class="panel-title">Schedule</h3>
+				</div>
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-xs-5" style="text-align: right"><strong>@Html.DisplayNameFor(s => s.Origin)</strong></div>
+						<div class="col-xs-7">@Html.DisplayFor(s => s.Origin)</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-5" style="text-align: right"><strong>@Html.DisplayNameFor(s => s.Destination)</strong></div>
+						<div class="col-xs-7">@Html.DisplayFor(s => s.Destination)</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-5" style="text-align: right"><strong>@Html.DisplayNameFor(s => s.DepartureTime)</strong></div>
+						<div class="col-xs-7">@Html.DisplayFor(s => s.DepartureTime)</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-5" style="text-align: right"><strong>@Html.DisplayNameFor(s => s.ArrivalTime)</strong></div>
+						<div class="col-xs-7">@Html.DisplayFor(s => s.ArrivalTime)</div>
+					</div>
+				</div>
+			</div>
 		</div>
-	</div>
-	<div class="form-group">
-		@Html.LabelFor(s => s.DepartureTime, new { @class = "col-md-2 control-label" })
-		<div class="col-md-10">
-			@Html.TextBoxFor(s => s.DepartureTime, new { id = "departureTimePicker", @class = "form-control" })
-			@*@Html.TextBoxFor(s => s.DepartureTime, "{MM/dd/yyyy h:mm tt}", new { id = "departureTimePicker", @class = "form-control" })*@
-		</div>
-	</div>
-	<div class="form-group">
-		@Html.LabelFor(s => s.ArrivalTime, new { @class = "col-md-2 control-label" })
-		<div class="col-md-10">
-			@Html.TextBoxFor(s => s.ArrivalTime, new { id = "arrivalTimePicker", @class = "form-control" })
-			@*@Html.TextBoxFor(s => s.ArrivalTime, "{MM/dd/yyyy h:mm tt}", new { id = "arrivalTimePicker", @class = "form-control" })*@
-		</div>
-	</div>
-	<div class="form-group">
-		<div class="col-md-offset-2 col-md-10">
-			<input type="submit" class="btn btn-success" value="@ViewBag.Action" />
-		</div>
-	</div>
-}
+	}
+</div>
 
 @section Scripts {
 	@Scripts.Render("~/bundles/jqueryval")

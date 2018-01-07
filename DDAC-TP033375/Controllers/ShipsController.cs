@@ -60,7 +60,7 @@ namespace DDAC_TP033375.Controllers
 			ViewBag.Title = "Edit Ship";
 			ViewBag.Action = "Update";
 
-			return View("ShipForm"/*, ship*/);
+			return View("ShipForm", ExistingShipFormViewModel(ship));
 		}
 
 		[HttpPost]
@@ -173,9 +173,9 @@ namespace DDAC_TP033375.Controllers
 		public ActionResult FillDestination(string origin)
 		{
 			var destinations = _context.Schedules
-				.DistinctBy(s => s.Destination)
 				.Where(s => s.Origin == origin)
-				.ToList();
+				.ToList()
+				.DistinctBy(s => s.Destination);
 
 			return Json(destinations, JsonRequestBehavior.AllowGet);
 		}
@@ -194,20 +194,22 @@ namespace DDAC_TP033375.Controllers
 			return new ShipFormViewModel
 			{
 				Ship = new Ship(),
-				Schedules = _context.Schedules.DistinctBy(s => s.Origin).ToList()
+				Schedules = _context.Schedules
+					.DistinctBy(s => s.Origin)
+					.ToList()
 			};
 		}
 
-		//private ShipFormViewModel ExistingShipFormViewModel(Ship ship)
-		//{
-		//	return new ShipFormViewModel
-		//	{
-		//		Ship = ship,
-		//		Schedules = _context.Schedules
-		//			.Where(s => s.Id == ship.ScheduleId)
-		//			.ToList()
-		//	};
-		//}
+		private ShipFormViewModel ExistingShipFormViewModel(Ship ship)
+		{
+			return new ShipFormViewModel
+			{
+				Ship = ship,
+				Schedules = _context.Schedules
+					.DistinctBy(s => s.Origin)
+					.ToList()
+			};
+		}
 
 	}
 }
