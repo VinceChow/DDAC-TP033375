@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using DDAC_TP033375.Models;
 using DDAC_TP033375.ViewModels;
+using Microsoft.Ajax.Utilities;
 
 namespace DDAC_TP033375.Controllers
 {
@@ -172,6 +173,7 @@ namespace DDAC_TP033375.Controllers
 		public ActionResult FillDestination(string origin)
 		{
 			var destinations = _context.Schedules
+				.DistinctBy(s => s.Destination)
 				.Where(s => s.Origin == origin)
 				.ToList();
 
@@ -192,7 +194,7 @@ namespace DDAC_TP033375.Controllers
 			return new ShipFormViewModel
 			{
 				Ship = new Ship(),
-				Schedules = _context.Schedules.ToList()
+				Schedules = _context.Schedules.DistinctBy(s => s.Origin).ToList()
 			};
 		}
 
