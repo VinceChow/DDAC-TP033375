@@ -17,15 +17,19 @@ namespace DDAC_TP033375.Models
 
 		[Required]
 		[Range(10, 1000)]
-		[Display(Name = "Number of Container Bay")]
+		[Display(Name = "Total Container Bay")]
 		public int NumberOfContainerBay { get; set; }
 
 		[Required]
+		[Display(Name = "Available Container Bay")]
 		public int NumberOfAvailableContainerBay { get; set; }
 
 		public Schedule Schedule { get; set; }
 
 		[Required]
 		public int ScheduleId { get; set; }
+
+		[Required]
+		public Boolean IsScheduled { get; set; }
 	}
 }

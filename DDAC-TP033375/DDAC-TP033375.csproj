@@ -241,6 +241,10 @@
     <Compile Include="Migrations\201801061741528_RemoveScheduleAvailabilityFromShip.Designer.cs">
       <DependentUpon>201801061741528_RemoveScheduleAvailabilityFromShip.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201801070633142_AddIsScheduledToShip.cs" />
+    <Compile Include="Migrations\201801070633142_AddIsScheduledToShip.Designer.cs">
+      <DependentUpon>201801070633142_AddIsScheduledToShip.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
@@ -348,6 +352,7 @@
     <Content Include="Views\Schedules\_Details.cshtml" />
     <Content Include="Views\Ships\Index.cshtml" />
     <Content Include="Views\Ships\ShipForm.cshtml" />
+    <Content Include="Views\Ships\_Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -389,6 +394,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201801061741528_RemoveScheduleAvailabilityFromShip.resx">
       <DependentUpon>201801061741528_RemoveScheduleAvailabilityFromShip.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801070633142_AddIsScheduledToShip.resx">
+      <DependentUpon>201801070633142_AddIsScheduledToShip.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

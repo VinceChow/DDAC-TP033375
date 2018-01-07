@@ -5,21 +5,28 @@
 	<h4 class="modal-title" id="myModalLabel">Schedule Details</h4>
 </div>
 <div class="modal-body">
-	<div class="row">
-		<div class="col-xs-5" style="text-align: right"><strong>@Html.DisplayNameFor(model => model.Origin)</strong></div>
-		<div class="col-xs-7">@Html.DisplayFor(model => model.Origin)</div>
-	</div>
-	<div class="row">
-		<div class="col-xs-5" style="text-align: right"><strong>@Html.DisplayNameFor(model => model.Destination)</strong></div>
-		<div class="col-xs-7">@Html.DisplayFor(model => model.Destination)</div>
-	</div>
-	<div class="row">
-		<div class="col-xs-5" style="text-align: right"><strong>@Html.DisplayNameFor(model => model.DepartureTime)</strong></div>
-		<div class="col-xs-7">@Html.DisplayFor(model => model.DepartureTime)</div>
-	</div>
-	<div class="row">
-		<div class="col-xs-5" style="text-align: right"><strong>@Html.DisplayNameFor(model => model.ArrivalTime)</strong></div>
-		<div class="col-xs-7">@Html.DisplayFor(model => model.ArrivalTime)</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			<h3 class="panel-title">Schedule</h3>
+		</div>
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-xs-5" style="text-align: right"><strong>@Html.DisplayNameFor(model => model.Origin)</strong></div>
+				<div class="col-xs-7">@Html.DisplayFor(model => model.Origin)</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-5" style="text-align: right"><strong>@Html.DisplayNameFor(model => model.Destination)</strong></div>
+				<div class="col-xs-7">@Html.DisplayFor(model => model.Destination)</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-5" style="text-align: right"><strong>@Html.DisplayNameFor(model => model.DepartureTime)</strong></div>
+				<div class="col-xs-7">@Html.DisplayFor(model => model.DepartureTime)</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-5" style="text-align: right"><strong>@Html.DisplayNameFor(model => model.ArrivalTime)</strong></div>
+				<div class="col-xs-7">@Html.DisplayFor(model => model.ArrivalTime)</div>
+			</div>
+		</div>
 	</div>
 </div>
 <div class="modal-footer">

@@ -83,6 +83,10 @@
 @section scripts
 {
 	<script>
+		$(document).on('hidden.bs.modal', function (e) {
+			$(e.target).removeData('bs.modal');
+		});
+
 		$(document).ready(function () {
 			$("#schedules").on("click", ".js-delete", function (e) {
 				e.preventDefault();

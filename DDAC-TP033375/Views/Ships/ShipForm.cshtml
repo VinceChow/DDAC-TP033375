@@ -129,7 +129,7 @@
 			month = month < 10 ? '0' + month : month; // the month 0-9 should be 01-09
 			hours = hours % 12;
 			hours = hours ? hours : 12; // the hour '0' should be '12'
-			minutes = minutes < 10 ? '0' + minutes : minutes;
+			minutes = minutes < 10 ? '0' + minutes : minutes; // the minutes 0-9 should be 01-09
 
 			var strTime = hours + ':' + minutes + ' ' + ampm;
 

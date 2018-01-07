@@ -26,18 +26,20 @@ namespace DDAC_TP033375.Controllers
 		// GET: Ships
 		public ActionResult Index()
 		{
-			return View();
+			var ships = _context.Ships.ToList();
+
+			return View(ships);
 		}
 
-		//public ActionResult Details(int id)
-		//{
-		//	var ship = _context.Ships.Include(s => s.Schedule).SingleOrDefault(s => s.Id == id);
+		public ActionResult Details(int id)
+		{
+			var ship = _context.Ships.Include(s => s.Schedule).SingleOrDefault(s => s.Id == id);
 
-		//	if (ship == null)
-		//		return HttpNotFound();
+			if (ship == null)
+				return HttpNotFound();
 
-		//	return PartialView("_Details", ship);
-		//}
+			return PartialView("_Details", ship);
+		}
 
 		public ActionResult New()
 		{
@@ -47,18 +49,18 @@ namespace DDAC_TP033375.Controllers
 			return View("ShipForm", NewShipFormViewModel());
 		}
 
-		//public ActionResult Edit(int id)
-		//{
-		//	var ship = _context.Ships.Include(s => s.Schedule).SingleOrDefault(s => s.Id == id);
+		public ActionResult Edit(int id)
+		{
+			var ship = _context.Ships.Include(s => s.Schedule).SingleOrDefault(s => s.Id == id);
 
-		//	if (ship == null)
-		//		return HttpNotFound();
+			if (ship == null)
+				return HttpNotFound();
 
-		//	ViewBag.Title = "Edit Ship";
-		//	ViewBag.Action = "Update";
+			ViewBag.Title = "Edit Ship";
+			ViewBag.Action = "Update";
 
-		//	return View("ShipForm", ship);
-		//}
+			return View("ShipForm"/*, ship*/);
+		}
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
@@ -73,6 +75,8 @@ namespace DDAC_TP033375.Controllers
 
 			ship.Schedule = null;
 			ship.NumberOfAvailableContainerBay = ship.NumberOfContainerBay;
+			ship.IsScheduled = true;
+
 			_context.Ships.Add(ship);
 
 			try
@@ -92,63 +96,78 @@ namespace DDAC_TP033375.Controllers
 			return View("ShipForm", viewModel);
 		}
 
-		//[HttpPost]
-		//[ValidateAntiForgeryToken]
-		//public ActionResult Update(Ship ship)
-		//{
-		//	if (!ModelState.IsValid)
-		//	{
-		//		return View("ShipForm");
-		//	}
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult Update(Ship ship)
+		{
+			if (!ModelState.IsValid)
+			{
+				return View("ShipForm");
+			}
 
-		//	var shipInDb = _context.Ships.Include(s => s.Schedule).Single(s => s.Id == ship.Id);
+			var shipInDb = _context.Ships.Include(s => s.Schedule).Single(s => s.Id == ship.Id);
 
-		//	if (shipInDb == null)
-		//		return HttpNotFound();
+			if (shipInDb == null)
+				return HttpNotFound();
 
-		//	shipInDb.Name = ship.Name;
-		//	shipInDb.NumberOfContainerBay = ship.NumberOfContainerBay;
-		//	shipInDb.NumberOfAvailableContainerBay = ship.DepartureTime;
-		//	shipInDb.ArrivalTime = ship.ArrivalTime;
+			// Validate Number of in used Container Bays
 
-		//	try
-		//	{
-		//		_context.SaveChanges();
+			int numberOfUnavailableContainerBay = shipInDb.NumberOfContainerBay - shipInDb.NumberOfAvailableContainerBay;
 
-		//		ViewBag.IsSuccess = true;
-		//		ViewBag.Message = "Ship has been updated successfully.";
-		//		ModelState.Clear();
-		//	}
-		//	catch (Exception ex)
-		//	{
-		//		ViewBag.IsSuccess = false;
-		//		ViewBag.Message = "Update Failed.\nError: " + ex.Message;
-		//	}
+			if (ship.NumberOfContainerBay < numberOfUnavailableContainerBay)
+			{
+				ViewBag.IsSuccess = false;
+				ViewBag.Message = "Update Failed.\nError: This ship currently has " + numberOfUnavailableContainerBay + " container bays in used.";
 
-		//	return View("ShipForm");
-		//}
+				return View("ShipForm");
+			}
 
-		//[HttpPost]
-		//public ActionResult Delete(int id)
-		//{
-		//	var shipInDb = _context.Ships.Include(s => s.Schedule).Single(s => s.Id == id);
+			// END OF VALIDATION
 
-		//	if (shipInDb == null)
-		//		return HttpNotFound();
+			shipInDb.Name = ship.Name;
+			shipInDb.NumberOfAvailableContainerBay += ship.NumberOfContainerBay - shipInDb.NumberOfContainerBay;
+			shipInDb.NumberOfContainerBay = ship.NumberOfContainerBay;
+			shipInDb.ScheduleId = ship.ScheduleId;
+			shipInDb.IsScheduled = ship.IsScheduled;
 
-		//	_context.Ships.Remove(shipInDb);
+			try
+			{
+				_context.SaveChanges();
 
-		//	try
-		//	{
-		//		_context.SaveChanges();
+				ViewBag.IsSuccess = true;
+				ViewBag.Message = "Ship has been updated successfully.";
+				ModelState.Clear();
+			}
+			catch (Exception ex)
+			{
+				ViewBag.IsSuccess = false;
+				ViewBag.Message = "Update Failed.\nError: " + ex.Message;
+			}
 
-		//		return Json(new { success = true, responseText = "Ship has been deleted successfully." }, JsonRequestBehavior.AllowGet);
-		//	}
-		//	catch (Exception ex)
-		//	{
-		//		return Json(new { success = false, responseText = "Delete Failed.\nError: " + ex.Message }, JsonRequestBehavior.AllowGet);
-		//	}
-		//}
+			return View("ShipForm");
+		}
+
+		[HttpPost]
+		public ActionResult Delete(int id)
+		{
+			var shipInDb = _context.Ships.Single(s => s.Id == id);
+
+			if (shipInDb == null)
+				return HttpNotFound();
+
+			_context.Ships.Remove(shipInDb);
+
+			try
+			{
+				_context.SaveChanges();
+
+				return Json(new { success = true, responseText = "Ship has been deleted successfully." }, JsonRequestBehavior.AllowGet);
+			}
+			catch (Exception ex)
+			{
+				return Json(new { success = false, responseText = "Delete Failed.\nError: " + ex.Message }, JsonRequestBehavior.AllowGet);
+			}
+		}
 
 		public ActionResult FillDestination(string origin)
 		{
@@ -176,6 +195,17 @@ namespace DDAC_TP033375.Controllers
 				Schedules = _context.Schedules.ToList()
 			};
 		}
+
+		//private ShipFormViewModel ExistingShipFormViewModel(Ship ship)
+		//{
+		//	return new ShipFormViewModel
+		//	{
+		//		Ship = ship,
+		//		Schedules = _context.Schedules
+		//			.Where(s => s.Id == ship.ScheduleId)
+		//			.ToList()
+		//	};
+		//}
 
 	}
 }
