@@ -1,0 +1,103 @@
+﻿@model DDAC_TP033375.Models.Customer
+
+@{
+	ViewBag.Title = ViewBag.Title;
+	var columnWidth = ViewBag.Action.Equals("Update") ? "col-md-6" : "col-md-12";
+}
+
+@if (ViewBag.IsSuccess != null)
+{
+	if (ViewBag.IsSuccess)
+	{
+		<div class="alert alert-dismissible alert-success">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			@ViewBag.Message @Html.ActionLink("Go to Customer Index", "Index", "", new { @class = "alert-link" })
+		</div>
+	}
+	else
+	{
+		<div class="alert alert-dismissible alert-danger">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			@ViewBag.Message
+		</div>
+	}
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div class="row">
+	@if (ViewBag.Action.Equals("Update"))
+	{
+		<div class="col-md-6">
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h3 class="panel-title">Customer</h3>
+				</div>
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-xs-5" style="text-align: right"><strong>@Html.DisplayNameFor(c => c.Name)</strong></div>
+						<div class="col-xs-7">@Html.DisplayFor(c => c.Name)</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-5" style="text-align: right"><strong>@Html.DisplayNameFor(c => c.IdentificationNumber)</strong></div>
+						<div class="col-xs-7">@Html.DisplayFor(c => c.IdentificationNumber)</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-5" style="text-align: right"><strong>@Html.DisplayNameFor(c => c.Email)</strong></div>
+						<div class="col-xs-7">@Html.DisplayFor(c => c.Email)</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-5" style="text-align: right"><strong>@Html.DisplayNameFor(c => c.PhoneNumber)</strong></div>
+						<div class="col-xs-7">@Html.DisplayFor(c => c.PhoneNumber)</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	}
+	<div class="@columnWidth">
+		@using (Html.BeginForm((string)@ViewBag.Action, "Customers", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+		{
+			<div class="well">
+				@Html.HiddenFor(c => c.Id)
+				@Html.AntiForgeryToken()
+				@Html.ValidationSummary("", new { @class = "text-danger" })
+				<div class="form-group">
+					@Html.LabelFor(c => c.Name, new { @class = "col-md-5 control-label" })
+					<div class="col-md-7">
+						@Html.TextBoxFor(c => c.Name, new { @class = "form-control" })
+					</div>
+				</div>
+				<div class="form-group">
+					@Html.LabelFor(c => c.IdentificationNumber, new { @class = "col-md-5 control-label" })
+					<div class="col-md-7">
+						@Html.TextBoxFor(c => c.IdentificationNumber, new { @class = "form-control" })
+					</div>
+				</div>
+				<div class="form-group">
+					@Html.LabelFor(c => c.Email, new { @class = "col-md-5 control-label" })
+					<div class="col-md-7">
+						@Html.TextBoxFor(c => c.Email, new { @class = "form-control" })
+					</div>
+				</div>
+				<div class="form-group">
+					@Html.LabelFor(c => c.PhoneNumber, new { @class = "col-md-5 control-label" })
+					<div class="col-md-7">
+						@Html.TextBoxFor(c => c.PhoneNumber, new { @class = "form-control" })
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-md-5" style="text-align: right">
+						@Html.ActionLink("Cancel", "Index", "", new { @class = "btn btn-default" })
+					</div>
+					<div class="col-md-7">
+						<input type="submit" class="btn btn-success" value="@ViewBag.Action" />
+					</div>
+				</div>
+			</div>
+		}
+	</div>
+</div>
+
+@section Scripts {
+	@Scripts.Render("~/bundles/jqueryval")
+}
