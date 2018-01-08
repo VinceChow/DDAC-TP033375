@@ -16,11 +16,12 @@ namespace DDAC_TP033375.Models
 		public Customer Customer { get; set; }
 
 		[Required]
-		public Container Container { get; set; }
+		public ICollection<Container> Containers { get; set; }
 
 		[Required]
 		public Ship Ship { get; set; }
 
+		[Required]
 		public DateTime BookedAt { get; set; }
 	}
 }
