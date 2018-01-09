@@ -52,13 +52,13 @@ namespace DDAC_TP033375.Controllers
 
 		public ActionResult Edit(int id)
 		{
+			ViewBag.Title = "Edit Ship";
+			ViewBag.Action = "Update";
+
 			var ship = _context.Ships.Include(s => s.Schedule).SingleOrDefault(s => s.Id == id);
 
 			if (ship == null)
 				return HttpNotFound();
-
-			ViewBag.Title = "Edit Ship";
-			ViewBag.Action = "Update";
 
 			return View("ShipForm", ExistingShipFormViewModel(ship));
 		}
@@ -67,12 +67,13 @@ namespace DDAC_TP033375.Controllers
 		[ValidateAntiForgeryToken]
 		public ActionResult Create(Ship ship)
 		{
+			ViewBag.Title = "New Ship";
+			ViewBag.Action = "Create";
+
 			var viewModel = NewShipFormViewModel();
 
 			if (!ModelState.IsValid)
 			{
-				ViewBag.Title = "New Ship";
-				ViewBag.Action = "Create";
 				ViewBag.IsSuccess = false;
 				ViewBag.Message = "Create Failed.";
 
@@ -89,16 +90,12 @@ namespace DDAC_TP033375.Controllers
 			{
 				_context.SaveChanges();
 
-				ViewBag.Title = "New Ship";
-				ViewBag.Action = "Create";
 				ViewBag.IsSuccess = true;
 				ViewBag.Message = "Ship has been added successfully.";
 				ModelState.Clear();
 			}
 			catch (Exception ex)
 			{
-				ViewBag.Title = "New Ship";
-				ViewBag.Action = "Create";
 				ViewBag.IsSuccess = false;
 				ViewBag.Message = "Fail to add ship.\nError: " + ex.Message;
 			}
@@ -110,6 +107,9 @@ namespace DDAC_TP033375.Controllers
 		[ValidateAntiForgeryToken]
 		public ActionResult Update(Ship ship)
 		{
+			ViewBag.Title = "Edit Ship";
+			ViewBag.Action = "Update";
+
 			var shipInDb = _context.Ships.Include(s => s.Schedule).Single(s => s.Id == ship.Id);
 
 			if (shipInDb == null)
@@ -117,8 +117,6 @@ namespace DDAC_TP033375.Controllers
 
 			if (!ModelState.IsValid)
 			{
-				ViewBag.Title = "Edit Ship";
-				ViewBag.Action = "Update";
 				ViewBag.IsSuccess = false;
 				ViewBag.Message = "Update Failed.";
 
@@ -131,8 +129,6 @@ namespace DDAC_TP033375.Controllers
 
 			if (ship.NumberOfContainerBay < numberOfUnavailableContainerBay)
 			{
-				ViewBag.Title = "Edit Ship";
-				ViewBag.Action = "Update";
 				ViewBag.IsSuccess = false;
 				ViewBag.Message = "Update Failed.\nError: This ship currently has " + numberOfUnavailableContainerBay + " container bays in used.";
 
@@ -151,16 +147,12 @@ namespace DDAC_TP033375.Controllers
 			{
 				_context.SaveChanges();
 
-				ViewBag.Title = "Edit Ship";
-				ViewBag.Action = "Update";
 				ViewBag.IsSuccess = true;
 				ViewBag.Message = "Ship has been updated successfully.";
 				ModelState.Clear();
 			}
 			catch (Exception ex)
 			{
-				ViewBag.Title = "Edit Ship";
-				ViewBag.Action = "Update";
 				ViewBag.IsSuccess = false;
 				ViewBag.Message = "Update Failed.\nError: " + ex.Message;
 			}

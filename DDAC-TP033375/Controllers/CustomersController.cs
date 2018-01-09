@@ -49,15 +49,15 @@ namespace DDAC_TP033375.Controllers
 
 		public ActionResult Edit(int id)
 		{
+			ViewBag.Title = "Edit Customer";
+			ViewBag.Action = "Update";
+
 			var customer = _context.Customers
 				.Include(c => c.RegisteredBy)
 				.SingleOrDefault(c => c.Id == id);
 
 			if (customer == null)
 				return HttpNotFound();
-
-			ViewBag.Title = "Edit Customer";
-			ViewBag.Action = "Update";
 
 			return View("CustomerForm", customer);
 		}
@@ -66,10 +66,11 @@ namespace DDAC_TP033375.Controllers
 		[ValidateAntiForgeryToken]
 		public ActionResult Create([Bind(Exclude = "Id")] Customer customer)
 		{
+			ViewBag.Title = "New Customer";
+			ViewBag.Action = "Create";
+
 			if (!ModelState.IsValid)
 			{
-				ViewBag.Title = "New Customer";
-				ViewBag.Action = "Create";
 				ViewBag.IsSuccess = false;
 				ViewBag.Message = "Create Failed.";
 
@@ -85,16 +86,12 @@ namespace DDAC_TP033375.Controllers
 			{
 				_context.SaveChanges();
 
-				ViewBag.Title = "New Customer";
-				ViewBag.Action = "Create";
 				ViewBag.IsSuccess = true;
 				ViewBag.Message = "Customer has been created successfully.";
 				ModelState.Clear();
 			}
 			catch (Exception ex)
 			{
-				ViewBag.Title = "New Customer";
-				ViewBag.Action = "Create";
 				ViewBag.IsSuccess = false;
 				ViewBag.Message = "Create Failed.\nError: " + ex.Message;
 			}
@@ -106,6 +103,9 @@ namespace DDAC_TP033375.Controllers
 		[ValidateAntiForgeryToken]
 		public ActionResult Update(Customer customer)
 		{
+			ViewBag.Title = "Edit Customer";
+			ViewBag.Action = "Update";
+
 			var customerInDb = _context.Customers.Single(c => c.Id == customer.Id);
 
 			if (customerInDb == null)
@@ -113,8 +113,6 @@ namespace DDAC_TP033375.Controllers
 
 			if (!ModelState.IsValid)
 			{
-				ViewBag.Title = "Edit Customer";
-				ViewBag.Action = "Update";
 				ViewBag.IsSuccess = false;
 				ViewBag.Message = "Update Failed.";
 
@@ -130,16 +128,12 @@ namespace DDAC_TP033375.Controllers
 			{
 				_context.SaveChanges();
 
-				ViewBag.Title = "Edit Customer";
-				ViewBag.Action = "Update";
 				ViewBag.IsSuccess = true;
 				ViewBag.Message = "Customer has been updated successfully.";
 				ModelState.Clear();
 			}
 			catch (Exception ex)
 			{
-				ViewBag.Title = "Edit Customer";
-				ViewBag.Action = "Update";
 				ViewBag.IsSuccess = false;
 				ViewBag.Message = "Update Failed.\nError: " + ex.Message;
 			}

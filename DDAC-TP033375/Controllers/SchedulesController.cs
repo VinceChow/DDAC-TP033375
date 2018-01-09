@@ -49,13 +49,13 @@ namespace DDAC_TP033375.Controllers
 
 		public ActionResult Edit(int id)
 		{
+			ViewBag.Title = "Edit Schedule";
+			ViewBag.Action = "Update";
+
 			var schedule = _context.Schedules.SingleOrDefault(s => s.Id == id);
 
 			if (schedule == null)
 				return HttpNotFound();
-
-			ViewBag.Title = "Edit Schedule";
-			ViewBag.Action = "Update";
 
 			return View("ScheduleForm", schedule);
 		}
@@ -64,10 +64,11 @@ namespace DDAC_TP033375.Controllers
 		[ValidateAntiForgeryToken]
 		public ActionResult Create([Bind(Exclude = "Id")] Schedule schedule)
 		{
+			ViewBag.Title = "New Schedule";
+			ViewBag.Action = "Create";
+
 			if (!ModelState.IsValid)
 			{
-				ViewBag.Title = "New Schedule";
-				ViewBag.Action = "Create";
 				ViewBag.IsSuccess = false;
 				ViewBag.Message = "Create Failed.";
 
@@ -80,16 +81,12 @@ namespace DDAC_TP033375.Controllers
 			{
 				_context.SaveChanges();
 
-				ViewBag.Title = "New Schedule";
-				ViewBag.Action = "Create";
 				ViewBag.IsSuccess = true;
 				ViewBag.Message = "Schedule has been created successfully.";
 				ModelState.Clear();
 			}
 			catch (Exception ex)
 			{
-				ViewBag.Title = "New Schedule";
-				ViewBag.Action = "Create";
 				ViewBag.IsSuccess = false;
 				ViewBag.Message = "Create Failed.\nError: " + ex.Message;
 				ModelState.Remove("DepartureTime");
@@ -103,6 +100,9 @@ namespace DDAC_TP033375.Controllers
 		[ValidateAntiForgeryToken]
 		public ActionResult Update(Schedule schedule)
 		{
+			ViewBag.Title = "Edit Schedule";
+			ViewBag.Action = "Update";
+
 			var scheduleInDb = _context.Schedules.Single(s => s.Id == schedule.Id);
 
 			if (scheduleInDb == null)
@@ -110,8 +110,6 @@ namespace DDAC_TP033375.Controllers
 
 			if (!ModelState.IsValid)
 			{
-				ViewBag.Title = "Edit Schedule";
-				ViewBag.Action = "Update";
 				ViewBag.IsSuccess = false;
 				ViewBag.Message = "Update Failed.";
 
@@ -127,16 +125,12 @@ namespace DDAC_TP033375.Controllers
 			{
 				_context.SaveChanges();
 
-				ViewBag.Title = "Edit Schedule";
-				ViewBag.Action = "Update";
 				ViewBag.IsSuccess = true;
 				ViewBag.Message = "Schedule has been updated successfully.";
 				ModelState.Clear();
 			}
 			catch (Exception ex)
 			{
-				ViewBag.Title = "Edit Schedule";
-				ViewBag.Action = "Update";
 				ViewBag.IsSuccess = false;
 				ViewBag.Message = "Update Failed.\nError: " + ex.Message;
 				ModelState.Remove("DepartureTime");
