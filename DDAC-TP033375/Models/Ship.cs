@@ -31,5 +31,7 @@ namespace DDAC_TP033375.Models
 
 		[Required]
 		public Boolean IsScheduled { get; set; }
+
+		public ICollection<Container> Containers { get; set; }
 	}
 }
