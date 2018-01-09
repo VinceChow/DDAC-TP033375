@@ -29,7 +29,6 @@ namespace DDAC_TP033375.Models
 		[Display(Name = "Phone Number")]
 		public string PhoneNumber { get; set; }
 
-		[Required]
 		public ApplicationUser RegisteredBy { get; set; }
 	}
 }
