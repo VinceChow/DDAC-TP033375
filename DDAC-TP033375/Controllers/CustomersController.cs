@@ -36,7 +36,12 @@ namespace DDAC_TP033375.Controllers
 
 		public ActionResult Details(int id)
 		{
-			throw new NotImplementedException();
+			var customer = _context.Customers.Include(c => c.RegisteredBy).SingleOrDefault(c => c.Id == id);
+
+			if (customer == null)
+				return HttpNotFound();
+
+			return PartialView("_Details", customer);
 		}
 
 		public ActionResult New()

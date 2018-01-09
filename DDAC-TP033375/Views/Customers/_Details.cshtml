@@ -1,0 +1,50 @@
+﻿@model DDAC_TP033375.Models.Customer
+
+<div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	<h4 class="modal-title" id="myModalLabel">Customer Details</h4>
+</div>
+<div class="modal-body">
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			<h3 class="panel-title">Customer</h3>
+		</div>
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-xs-5" style="text-align: right"><strong>@Html.DisplayNameFor(model => model.Name)</strong></div>
+				<div class="col-xs-7">@Html.DisplayFor(model => model.Name)</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-5" style="text-align: right"><strong>IC / Passport Number</strong></div>
+				<div class="col-xs-7">@Html.DisplayFor(model => model.IdentificationNumber)</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-5" style="text-align: right"><strong>@Html.DisplayNameFor(model => model.Email)</strong></div>
+				<div class="col-xs-7">@Html.DisplayFor(model => model.Email)</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-5" style="text-align: right"><strong>@Html.DisplayNameFor(model => model.PhoneNumber)</strong></div>
+				<div class="col-xs-7">@Html.DisplayFor(model => model.PhoneNumber)</div>
+			</div>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			<h3 class="panel-title">Registered By</h3>
+		</div>
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-xs-5" style="text-align: right"><strong>Agent</strong></div>
+				<div class="col-xs-7">@Html.DisplayFor(model => model.RegisteredBy.Name)</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-5" style="text-align: right"><strong>Company</strong></div>
+				<div class="col-xs-7">@Html.DisplayFor(model => model.RegisteredBy.CompanyName)</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal-footer">
+	<button type="button" class="btn btn-default" data-dismiss="modal">Back to List</button>
+	@Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-warning" })
+</div>
