@@ -151,9 +151,26 @@ namespace DDAC_TP033375.Controllers
 			return View("CustomerForm", newCustomerInDb);
 		}
 
-		public ActionResult Delete()
+		[HttpPost]
+		public ActionResult Delete(int id)
 		{
-			throw new NotImplementedException();
+			var customerInDb = _context.Customers.Single(c => c.Id == id);
+
+			if (customerInDb == null)
+				return HttpNotFound();
+
+			_context.Customers.Remove(customerInDb);
+
+			try
+			{
+				_context.SaveChanges();
+
+				return Json(new { success = true, responseText = "Customer has been deleted successfully." }, JsonRequestBehavior.AllowGet);
+			}
+			catch (Exception ex)
+			{
+				return Json(new { success = false, responseText = "Delete Failed.\nError: " + ex.Message }, JsonRequestBehavior.AllowGet);
+			}
 		}
 	}
 }
