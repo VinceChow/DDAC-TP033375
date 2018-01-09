@@ -52,6 +52,21 @@
 					</div>
 				</div>
 			</div>
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h3 class="panel-title">Registered By</h3>
+				</div>
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-xs-5" style="text-align: right"><strong>Agent</strong></div>
+						<div class="col-xs-7">@Html.DisplayFor(c => c.RegisteredBy.Name)</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-5" style="text-align: right"><strong>Company</strong></div>
+						<div class="col-xs-7">@Html.DisplayFor(c => c.RegisteredBy.CompanyName)</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	}
 	<div class="@columnWidth">

@@ -102,6 +102,55 @@ namespace DDAC_TP033375.Controllers
 			return View("CustomerForm");
 		}
 
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult Update(Customer customer)
+		{
+			var customerInDb = _context.Customers.Single(c => c.Id == customer.Id);
+
+			if (customerInDb == null)
+				return HttpNotFound();
+
+			if (!ModelState.IsValid)
+			{
+				ViewBag.Title = "Edit Customer";
+				ViewBag.Action = "Update";
+				ViewBag.IsSuccess = false;
+				ViewBag.Message = "Update Failed.";
+
+				return View("CustomerForm", customerInDb);
+			}
+
+			customerInDb.Name = customer.Name;
+			customerInDb.IdentificationNumber = customer.IdentificationNumber;
+			customerInDb.Email = customer.Email;
+			customerInDb.PhoneNumber = customer.PhoneNumber;
+
+			try
+			{
+				_context.SaveChanges();
+
+				ViewBag.Title = "Edit Customer";
+				ViewBag.Action = "Update";
+				ViewBag.IsSuccess = true;
+				ViewBag.Message = "Customer has been updated successfully.";
+				ModelState.Clear();
+			}
+			catch (Exception ex)
+			{
+				ViewBag.Title = "Edit Customer";
+				ViewBag.Action = "Update";
+				ViewBag.IsSuccess = false;
+				ViewBag.Message = "Update Failed.\nError: " + ex.Message;
+			}
+
+			var newCustomerInDb = _context.Customers
+				.Include(c => c.RegisteredBy)
+				.Single(s => s.Id == customer.Id);
+
+			return View("CustomerForm", newCustomerInDb);
+		}
+
 		public ActionResult Delete()
 		{
 			throw new NotImplementedException();
