@@ -15,16 +15,14 @@ namespace DDAC_TP033375.Models
 
 		public ApplicationUser BookedBy { get; set; }
 
-		[Required]
 		public Customer Customer { get; set; }
 
-		[Required]
 		public ICollection<Container> Containers { get; set; }
 
-		[Required]
+		public Schedule Schedule { get; set; }
+
 		public Ship Ship { get; set; }
 
-		[Required]
 		[Display(Name = "Booked At (mm/dd/yyyy)")]
 		[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{MM/dd/yyyy h:mm tt}")]
 		public DateTime BookedAt { get; set; }

@@ -62,7 +62,6 @@ namespace DDAC_TP033375.Controllers
 		{
 			return new BookingFormViewModel
 			{
-				Booking = new Booking(),
 				Customers = _context.Customers.ToList()
 			};
 		}

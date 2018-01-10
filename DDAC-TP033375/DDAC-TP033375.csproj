@@ -263,6 +263,10 @@
     <Compile Include="Migrations\201801091405460_AddBookingIdToBooking.Designer.cs">
       <DependentUpon>201801091405460_AddBookingIdToBooking.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201801100305454_UpdateBookingTable.cs" />
+    <Compile Include="Migrations\201801100305454_UpdateBookingTable.Designer.cs">
+      <DependentUpon>201801100305454_UpdateBookingTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
@@ -433,6 +437,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201801091405460_AddBookingIdToBooking.resx">
       <DependentUpon>201801091405460_AddBookingIdToBooking.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801100305454_UpdateBookingTable.resx">
+      <DependentUpon>201801100305454_UpdateBookingTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
