@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using DDAC_TP033375.Models;
 using DDAC_TP033375.ViewModels;
 using Microsoft.Ajax.Utilities;
+using Microsoft.AspNet.Identity;
 
 namespace DDAC_TP033375.Controllers
 {
@@ -58,10 +59,36 @@ namespace DDAC_TP033375.Controllers
 		}
 
 		[HttpPost]
-		[ValidateAntiForgeryToken]
 		public ActionResult Create(BookingFormViewModel viewModel)
 		{
-			throw new NotImplementedException();
+			var containers = new List<Container>();
+
+			foreach (var containerId in viewModel.ContainerIds)
+			{
+				containers.Add(_context.Containers.Find(containerId));
+			}
+
+			var booking = new Booking
+			{
+				BookedBy = _context.Users.Find(User.Identity.GetUserId()),
+				Customer = _context.Customers.Find(viewModel.CustomerId),
+				Containers = containers,
+				Schedule = _context.Schedules.Find(viewModel.ScheduleId),
+				Ship = _context.Ships.Find(viewModel.ShipId),
+				BookedAt = DateTime.Now
+			};
+
+			try
+			{
+				_context.Bookings.Add(booking);
+				_context.SaveChanges();
+
+				return Json(new { success = true, responseText = "Booking has been created successfully." }, JsonRequestBehavior.AllowGet);
+			}
+			catch (Exception ex)
+			{
+				return Json(new { success = false, responseText = "Booking Failed.\nError: " + ex.Message }, JsonRequestBehavior.AllowGet);
+			}
 		}
 
 		[HttpPost]
@@ -123,6 +150,15 @@ namespace DDAC_TP033375.Controllers
 				.ToList();
 
 			return Json(schedules, JsonRequestBehavior.AllowGet);
+		}
+
+		public ActionResult FillShip(int scheduleId, int numberOfContainer)
+		{
+			var ships = GetShipsWithEnoughContainerBays(numberOfContainer)
+				.Where(s => s.ScheduleId == scheduleId)
+				.ToList();
+
+			return Json(ships, JsonRequestBehavior.AllowGet);
 		}
 
 		[HttpPost]

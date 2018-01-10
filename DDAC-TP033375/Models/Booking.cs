@@ -8,10 +8,8 @@ namespace DDAC_TP033375.Models
 {
 	public class Booking
 	{
-		public int Id { get; set; }
-
 		[Display(Name = "Booking ID")]
-		public int BookingId { get; set; }
+		public int Id { get; set; }
 
 		public ApplicationUser BookedBy { get; set; }
 

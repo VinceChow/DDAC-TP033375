@@ -92,8 +92,16 @@
 					<div class="form-group">
 						<label class="col-md-5 control-label right">Departure Time (MM/DD/YYYY)</label>
 						<div class="col-md-7">
-							<select id="bookingDepartureTime" name="bookingDepartureTime" class="form-control">
+							<select id="bookingDepartureTime" name="bookingDepartureTime" class="form-control" onchange="fillShip()">
 								<option value="">-- Time Available --</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-5 control-label right">Ship</label>
+						<div class="col-md-7">
+							<select id="shipAvailable" name="shipAvailable" class="form-control">
+								<option value="">-- Ship Available --</option>
 							</select>
 						</div>
 					</div>
@@ -119,6 +127,9 @@
 
 	<script>
 		var numberOfContainer = 0;
+		var viewModel = {
+			ContainerIds: []
+		};
 
 		toastr.options = {
 			"closeButton": true,
@@ -158,6 +169,8 @@
 						$('<option></option>').val('').html("-- To --")); // clear before appending new list
 					$("#bookingDepartureTime").html("").append(
 						$('<option></option>').val('').html("-- Time Available --")); // clear before appending new list
+					$("#shipAvailable").html("").append(
+						$('<option></option>').val('').html("-- Ship Available --")); // clear before appending new list
 				}
 			});
 		}
@@ -179,6 +192,11 @@
 						$("#bookingDestination").append(
 							$('<option></option>').val(destination.Id).html(destination.Destination));
 					});
+
+					$("#bookingDepartureTime").html("").append(
+						$('<option></option>').val('').html("-- Time Available --")); // clear before appending new list
+					$("#shipAvailable").html("").append(
+						$('<option></option>').val('').html("-- Ship Available --")); // clear before appending new list
 				}
 			});
 		}
@@ -201,6 +219,30 @@
 					$.each(schedules, function (i, schedule) {
 						$("#bookingDepartureTime").append(
 							$('<option></option>').val(schedule.Id).html(JsonToJSTime(schedule.DepartureTime)));
+					});
+
+					$("#shipAvailable").html("").append(
+						$('<option></option>').val('').html("-- Ship Available --")); // clear before appending new list
+				}
+			});
+		}
+
+		function fillShip() {
+			var scheduleId = $('#bookingDepartureTime :selected').val();
+			$.ajax({
+				url: '@Url.Action("FillShip")',
+				type: "GET",
+				dataType: "JSON",
+				data: {
+					scheduleId: scheduleId,
+					numberOfContainer: numberOfContainer
+				},
+				success: function (ships) {
+					$("#shipAvailable").html("").append(
+						$('<option></option>').val('').html("-- Ship Available --")); // clear before appending new list
+					$.each(ships, function (i, ship) {
+						$("#shipAvailable").append(
+							$('<option></option>').val(ship.Id).html(ship.Name));
 					});
 				}
 			});
@@ -226,6 +268,13 @@
 			return month + "/" + date + "/" + jsDate.getFullYear() + "  " + strTime;
 		}
 
+		function removeArrayElement(arr, value) {
+			var index = arr.indexOf(value);
+			arr.splice(index, 1);
+
+			return arr;
+		}
+
 		$("#containerList").on("click", ".js-delete", function (e) {
 			e.preventDefault();
 
@@ -244,6 +293,7 @@
 							success: function(response) {
 								if (response != null && response.success) {
 									$('#' + id).remove();
+									viewModel.ContainerIds = removeArrayElement(viewModel.ContainerIds, id);
 									numberOfContainer--;
 									fillOrigin();
 									toastr.success(response.responseText);
@@ -303,8 +353,57 @@
 								$('#containerType').val('');
 								$('#containerWeight').val('');
 
+								viewModel.ContainerIds.push(response.newContainer.Id);
 								numberOfContainer++;
 								fillOrigin();
+								toastr.success(response.responseText);
+							} else {
+								toastr.error(response.responseText);
+							}
+						},
+						error: function(response) {
+							toastr.error("ERROR!");
+						}
+					});
+					return false;
+				}
+			});
+
+
+			$('#scheduleForm').validate({
+				debug: true,
+
+				rules: {
+					bookingOrigin: {
+						required: true
+					},
+					bookingDestination: {
+						required: true
+					},
+					bookingDepartureTime: {
+						required: true
+					},
+					shipAvailable: {
+						required: true
+					}
+				},
+				submitHandler: function () {
+
+					viewModel.CustomerId = @Model.Customer.Id;
+					viewModel.ScheduleId = $('#bookingDepartureTime').val();
+					viewModel.ShipId = $('#shipAvailable').val();
+
+					$.ajax({
+						url: '@Url.Action("Create")',
+						type: "POST",
+						data: JSON.stringify(viewModel),
+						dataType: "json",
+						contentType: "application/json; charset=utf-8",
+						success: function(response) {
+							if (response != null && response.success) {
+
+								// TODO: Clear Model
+
 								toastr.success(response.responseText);
 							} else {
 								toastr.error(response.responseText);

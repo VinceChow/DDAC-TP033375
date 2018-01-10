@@ -10,6 +10,8 @@ namespace DDAC_TP033375.ViewModels
 	{
 		public Customer Customer { get; set; }
 
+		public int CustomerId { get; set; }
+
 		public List<int> ContainerIds { get; set; }
 
 		public int ScheduleId { get; set; }
