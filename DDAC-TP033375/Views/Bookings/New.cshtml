@@ -29,13 +29,13 @@
 					<div class="row">
 						<div class="col-md-offset-1">
 							<div id="containerList" class="col-md-10 list-group">
-								<a href="" class="list-group-item">
+								<a href="#" class="list-group-item">
 									Cras justo odio
 								</a>
-								<a href="" class="list-group-item">
+								<a href="#" class="list-group-item">
 									Dapibus ac facilisis in
 								</a>
-								<a href="" class="list-group-item">
+								<a href="#" class="list-group-item">
 									Morbi leo risus
 								</a>
 							</div>
@@ -76,7 +76,7 @@
 					<div class="form-group">
 						<label class="col-md-5 control-label right">Origin</label>
 						<div class="col-md-7">
-							<select id="bookingOrigin" class="form-control" data-val="true" data-val-required="The Origin field is required." onchange="FillDestination()">
+							<select id="bookingOrigin" name="bookingOrigin" class="form-control" onchange="fillDestination()">
 								<option value="">-- From --</option>
 							</select>
 						</div>
@@ -84,7 +84,7 @@
 					<div class="form-group">
 						<label class="col-md-5 control-label right">Destination</label>
 						<div class="col-md-7">
-							<select id="bookingDestination" class="form-control" data-val="true" data-val-required="The Destination field is required." onchange="FillTime()">
+							<select id="bookingDestination" name="bookingDestination" class="form-control" onchange="fillTime()">
 								<option value="">-- To --</option>
 							</select>
 						</div>
@@ -92,7 +92,7 @@
 					<div class="form-group">
 						<label class="col-md-5 control-label right">Departure Time (MM/DD/YYYY)</label>
 						<div class="col-md-7">
-							<select id="bookingDepartureTime" class="form-control" data-val="true" data-val-required="The Departure Time field is required." onchange="UpdateScheduleId()">
+							<select id="bookingDepartureTime" name="bookingDepartureTime" class="form-control">
 								<option value="">-- Time Available --</option>
 							</select>
 						</div>
@@ -118,6 +118,8 @@
 	@*<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>*@
 
 	<script>
+		var numberOfContainer = 0;
+
 		toastr.options = {
 			"closeButton": true,
 			"debug": false,
@@ -135,6 +137,127 @@
 			"showMethod": "fadeIn",
 			"hideMethod": "fadeOut"
 		}
+
+		function fillOrigin() {
+			$.ajax({
+				url: '@Url.Action("FillOrigin")',
+				type: "GET",
+				dataType: "JSON",
+				data: {
+					numberOfContainer: numberOfContainer
+				},
+				success: function (origins) {
+					$("#bookingOrigin").html("").append(
+						$('<option></option>').val('').html("-- From --")); // clear before appending new list
+					$.each(origins, function (i, origin) {
+						$("#bookingOrigin").append(
+							$('<option></option>').val(origin.Id).html(origin.Origin));
+					});
+
+					$("#bookingDestination").html("").append(
+						$('<option></option>').val('').html("-- To --")); // clear before appending new list
+					$("#bookingDepartureTime").html("").append(
+						$('<option></option>').val('').html("-- Time Available --")); // clear before appending new list
+				}
+			});
+		}
+
+		function fillDestination() {
+			var origin = $('#bookingOrigin :selected').text();
+			$.ajax({
+				url: '@Url.Action("FillDestination")',
+				type: "GET",
+				dataType: "JSON",
+				data: {
+					origin: origin,
+					numberOfContainer: numberOfContainer
+				},
+				success: function (destinations) {
+					$("#bookingDestination").html("").append(
+						$('<option></option>').val('').html("-- To --")); // clear before appending new list
+					$.each(destinations, function (i, destination) {
+						$("#bookingDestination").append(
+							$('<option></option>').val(destination.Id).html(destination.Destination));
+					});
+				}
+			});
+		}
+
+		function fillTime() {
+			var origin = $('#bookingOrigin :selected').text();
+			var destination = $('#bookingDestination :selected').text();
+			$.ajax({
+				url: '@Url.Action("FillTime")',
+				type: "GET",
+				dataType: "JSON",
+				data: {
+					origin: origin,
+					destination: destination,
+					numberOfContainer: numberOfContainer
+				},
+				success: function (schedules) {
+					$("#bookingDepartureTime").html("").append(
+						$('<option></option>').val('').html("-- Time Available --")); // clear before appending new list
+					$.each(schedules, function (i, schedule) {
+						$("#bookingDepartureTime").append(
+							$('<option></option>').val(schedule.Id).html(JsonToJSTime(schedule.DepartureTime)));
+					});
+				}
+			});
+		}
+
+		function JsonToJSTime(jsonDateTime) {
+			var jsDate = new Date(jsonDateTime.match(/\d+/)[0] * 1); // Convert json to javascript datetime format
+
+			var date = jsDate.getDate();
+			var month = jsDate.getMonth() + 1;
+			var hours = jsDate.getHours();
+			var minutes = jsDate.getMinutes();
+			var ampm = hours >= 12 ? 'PM' : 'AM';
+
+			date = date < 10 ? '0' + date : date; // the date 0-9 should be 01-09
+			month = month < 10 ? '0' + month : month; // the month 0-9 should be 01-09
+			hours = hours % 12;
+			hours = hours ? hours : 12; // the hour '0' should be '12'
+			minutes = minutes < 10 ? '0' + minutes : minutes; // the minutes 0-9 should be 01-09
+
+			var strTime = hours + ':' + minutes + ' ' + ampm;
+
+			return month + "/" + date + "/" + jsDate.getFullYear() + "  " + strTime;
+		}
+
+		$("#containerList").on("click", ".js-delete", function (e) {
+			e.preventDefault();
+
+			var button = $(this);
+			var id = button.attr("id");
+			var info = button.attr("data-info");
+
+			bootbox.confirm("Are you sure you want to delete this container, <strong>" + info + "</strong>?",
+				function (result) {
+					if (result) {
+						$.ajax({
+							url: '@Url.Action("DeleteContainer")',
+							type: "POST",
+							data: { id: id },
+							dataType: "JSON",
+							success: function(response) {
+								if (response != null && response.success) {
+									$('#' + id).remove();
+									numberOfContainer--;
+									fillOrigin();
+									toastr.success(response.responseText);
+								} else {
+									toastr.error(response.responseText);
+								}
+							},
+							error: function(response) {
+								toastr.error("ERROR!");
+							}
+						});
+					}
+				});
+		});
 
 		$(function() {
 			$("[rel='tooltip']").tooltip();
@@ -169,16 +292,19 @@
 						contentType: "application/json; charset=utf-8",
 						success: function(response) {
 							if (response != null && response.success) {
-								$('#containerList').append("<a href='' id='" +
-									response.newContainer.Id +
-									"' class='list-group-item'>" +
-									response.newContainer.ItemType +
-									" (" +
-									response.newContainer.WeightInTonne +
-									" t)</a>");
+
+								var details = response.newContainer.ItemType + " (" +
+									response.newContainer.WeightInTonne + " t)";
+
+								$('#containerList').append("<a href='#' id='" + response.newContainer.Id +
+									"' class='list-group-item js-delete' data-info='" + details +
+									"'>" + details + "</a>");
+
 								$('#containerType').val('');
 								$('#containerWeight').val('');
 
+								numberOfContainer++;
+								fillOrigin();
 								toastr.success(response.responseText);
 							} else {
 								toastr.error(response.responseText);
@@ -194,66 +320,4 @@
 
 		});
 	</script>
-
-	@*<script>
-			function FillDestination() {
-				var origin = $('#Ship_Schedule_Origin :selected').text();
-				$.ajax({
-					url: '@Url.Action("FillDestination")',
-					type: "GET",
-					dataType: "JSON",
-					data: { origin: origin },
-					success: function (destinations) {
-						$("#Ship_Schedule_Destination").html("").append(
-							$('<option></option>').val('').html("-- To --")); // clear before appending new list
-						$.each(destinations, function (i, destination) {
-							$("#Ship_Schedule_Destination").append(
-								$('<option></option>').val(destination.Id).html(destination.Destination));
-						});
-					}
-				});
-			}
-
-			function FillTime() {
-				var origin = $('#Ship_Schedule_Origin :selected').text();
-				var destination = $('#Ship_Schedule_Destination :selected').text();
-				$.ajax({
-					url: '@Url.Action("FillTime")',
-					type: "GET",
-					dataType: "JSON",
-					data: {
-						origin: origin,
-						destination: destination
-					},
-					success: function (schedules) {
-						$("#Ship_ScheduleId").html("").append(
-							$('<option></option>').val('').html("-- Time Available --")); // clear before appending new list
-						$.each(schedules, function (i, schedule) {
-							$("#Ship_ScheduleId").append(
-								$('<option></option>').val(schedule.Id).html(JsonToJSTime(schedule.DepartureTime)));
-						});
-					}
-				});
-			}
-
-			function JsonToJSTime(jsonDateTime) {
-				var jsDate = new Date(jsonDateTime.match(/\d+/)[0] * 1); // Convert json to javascript datetime format
-
-				var date = jsDate.getDate();
-				var month = jsDate.getMonth() + 1;
-				var hours = jsDate.getHours();
-				var minutes = jsDate.getMinutes();
-				var ampm = hours >= 12 ? 'PM' : 'AM';
-
-				date = date < 10 ? '0' + date : date; // the date 0-9 should be 01-09
-				month = month < 10 ? '0' + month : month; // the month 0-9 should be 01-09
-				hours = hours % 12;
-				hours = hours ? hours : 12; // the hour '0' should be '12'
-				minutes = minutes < 10 ? '0' + minutes : minutes; // the minutes 0-9 should be 01-09
-
-				var strTime = hours + ':' + minutes + ' ' + ampm;
-
-				return month + "/" + date + "/" + jsDate.getFullYear() + "  " + strTime;
-			}
-		</script>*@
 }

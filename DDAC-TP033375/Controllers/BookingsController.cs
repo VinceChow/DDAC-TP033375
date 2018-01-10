@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using DDAC_TP033375.Models;
 using DDAC_TP033375.ViewModels;
+using Microsoft.Ajax.Utilities;
 
 namespace DDAC_TP033375.Controllers
 {
@@ -93,5 +94,66 @@ namespace DDAC_TP033375.Controllers
 			}
 		}
 
+		public ActionResult FillOrigin(int numberOfContainer)
+		{
+			var origins = GetShipsWithEnoughContainerBays(numberOfContainer)
+				.Select(s => s.Schedule)
+				.ToList()
+				.DistinctBy(s => s.Origin);
+
+			return Json(origins, JsonRequestBehavior.AllowGet);
+		}
+
+		public ActionResult FillDestination(string origin, int numberOfContainer)
+		{
+			var destinations = GetShipsWithEnoughContainerBays(numberOfContainer)
+				.Select(s => s.Schedule)
+				.Where(s => s.Origin == origin)
+				.ToList()
+				.DistinctBy(s => s.Destination);
+
+			return Json(destinations, JsonRequestBehavior.AllowGet);
+		}
+
+		public ActionResult FillTime(string origin, string destination, int numberOfContainer)
+		{
+			var schedules = GetShipsWithEnoughContainerBays(numberOfContainer)
+				.Select(s => s.Schedule)
+				.Where(s => s.Origin == origin && s.Destination == destination)
+				.ToList();
+
+			return Json(schedules, JsonRequestBehavior.AllowGet);
+		}
+
+		[HttpPost]
+		public ActionResult DeleteContainer(int id)
+		{
+			var containerInDb = _context.Containers.Single(c => c.Id == id);
+
+			if (containerInDb == null)
+				return Json(new { success = false, responseText = "Delete Failed.\nError: Record not found." }, JsonRequestBehavior.AllowGet);
+
+			_context.Containers.Remove(containerInDb);
+
+			try
+			{
+				_context.SaveChanges();
+
+				return Json(new { success = true, responseText = "Container has been deleted successfully." }, JsonRequestBehavior.AllowGet);
+			}
+			catch (Exception ex)
+			{
+				return Json(new { success = false, responseText = "Delete Failed.\nError: " + ex.Message }, JsonRequestBehavior.AllowGet);
+			}
+		}
+
+		private IEnumerable<Ship> GetShipsWithEnoughContainerBays(int numberOfContainer)
+		{
+			return _context.Ships
+				.Where(s => s.IsScheduled)
+				.Where(s => s.NumberOfAvailableContainerBay >= numberOfContainer)
+				.Include(s => s.Schedule)
+				.ToList();
+		}
 	}
 }
