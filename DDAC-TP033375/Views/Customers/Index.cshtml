@@ -56,6 +56,7 @@
 				@Html.DisplayFor(modelItem => item.RegisteredBy.CompanyName)
 			</td>
 			<td>
+				@Html.ActionLink("Book", "New", "Bookings", new { id = item.Id }, new { @class = "label label-success" })
 				@Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "label label-primary", data_toggle = "modal", data_target = "#customerDetailsModal" })
 				@Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "label label-warning" })
 				<a href="" class="label label-danger js-delete" data-id="@item.Id" data-info="@item.Name">Delete</a>

@@ -8,11 +8,9 @@ namespace DDAC_TP033375.ViewModels
 {
 	public class BookingFormViewModel
 	{
-		public IEnumerable<Customer> Customers { get; set; }
+		public Customer Customer { get; set; }
 
-		public int CustomerId { get; set; }
-
-		public IEnumerable<int> ContainerIds { get; set; }
+		public List<int> ContainerIds { get; set; }
 
 		public int ScheduleId { get; set; }
 

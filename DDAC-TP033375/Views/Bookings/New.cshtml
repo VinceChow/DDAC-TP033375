@@ -1,0 +1,259 @@
+﻿@model DDAC_TP033375.ViewModels.BookingFormViewModel
+
+@{
+	ViewBag.Title = "New Booking";
+}
+
+<h2>New Booking</h2>
+
+<div class="row">
+	<div class="col-md-6">
+		<form id="containerForm" method="post" role="form">
+			<div class="panel panel-default">
+				<div class="panel-heading"><strong>Container</strong></div>
+				<div class="panel-body">
+					<div class="form-group">
+						<div class="input-group">
+							<span class="input-group-addon">Type</span>
+							<input id="containerType" name="containerType" type="text" class="form-control">
+							<span class="input-group-addon">
+								Weight (tonne/t)
+								<span class="glyphicon glyphicon-info-sign" aria-hidden="true" rel="tooltip" title="1 Tonne = 1000 Kilogram"></span>
+							</span>
+							<input id="containerWeight" name="containerWeight" class="form-control" type="text">
+							<span class="input-group-btn">
+								<input type="submit" class="btn btn-default" value="Add">
+							</span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-offset-1">
+							<div id="containerList" class="col-md-10 list-group">
+								<a href="" class="list-group-item">
+									Cras justo odio
+								</a>
+								<a href="" class="list-group-item">
+									Dapibus ac facilisis in
+								</a>
+								<a href="" class="list-group-item">
+									Morbi leo risus
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="col-md-6">
+		<div class="panel panel-info">
+			<div class="panel-heading">
+				<h3 class="panel-title">Customer</h3>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-xs-5" style="text-align: right"><strong>@Html.DisplayNameFor(b => b.Customer.Name)</strong></div>
+					<div class="col-xs-7">@Html.DisplayFor(b => b.Customer.Name)</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-5" style="text-align: right"><strong>IC / Passport Number</strong></div>
+					<div class="col-xs-7">@Html.DisplayFor(b => b.Customer.IdentificationNumber)</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-5" style="text-align: right"><strong>@Html.DisplayNameFor(b => b.Customer.Email)</strong></div>
+					<div class="col-xs-7">@Html.DisplayFor(b => b.Customer.Email)</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-5" style="text-align: right"><strong>@Html.DisplayNameFor(b => b.Customer.PhoneNumber)</strong></div>
+					<div class="col-xs-7">@Html.DisplayFor(b => b.Customer.PhoneNumber)</div>
+				</div>
+			</div>
+		</div>
+		<form id="scheduleForm" class="form-horizontal">
+			<div class="panel panel-default">
+				<div class="panel-heading"><strong>Schedule</strong></div>
+				<div class="panel-body">
+					<div class="form-group">
+						<label class="col-md-5 control-label right">Origin</label>
+						<div class="col-md-7">
+							<select id="bookingOrigin" class="form-control" data-val="true" data-val-required="The Origin field is required." onchange="FillDestination()">
+								<option value="">-- From --</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-5 control-label right">Destination</label>
+						<div class="col-md-7">
+							<select id="bookingDestination" class="form-control" data-val="true" data-val-required="The Destination field is required." onchange="FillTime()">
+								<option value="">-- To --</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-5 control-label right">Departure Time (MM/DD/YYYY)</label>
+						<div class="col-md-7">
+							<select id="bookingDepartureTime" class="form-control" data-val="true" data-val-required="The Departure Time field is required." onchange="UpdateScheduleId()">
+								<option value="">-- Time Available --</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-md-5 right">
+					@Html.ActionLink("Cancel", "Index", new { }, new { @class = "btn btn-default" })
+				</div>
+				<div class="col-md-7">
+					<input type="submit" class="btn btn-success" value="Create" />
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+<br /><br /><br />
+
+@section Scripts {
+	@Scripts.Render("~/bundles/jqueryval")
+	@*<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>*@
+
+	<script>
+		toastr.options = {
+			"closeButton": true,
+			"debug": false,
+			"newestOnTop": false,
+			"progressBar": true,
+			"positionClass": "toast-top-right",
+			"preventDuplicates": true,
+			"onclick": null,
+			"showDuration": "300",
+			"hideDuration": "1000",
+			"timeOut": "10000",
+			"extendedTimeOut": "10000",
+			"showEasing": "swing",
+			"hideEasing": "linear",
+			"showMethod": "fadeIn",
+			"hideMethod": "fadeOut"
+		}
+
+		$(function() {
+			$("[rel='tooltip']").tooltip();
+		});
+
+		$(document).ready(function() {
+			var tempContainer = {};
+
+			$('#containerForm').validate({
+				debug: true,
+
+				rules: {
+					containerType: {
+						required: true
+					},
+					containerWeight: {
+						required: true,
+						number: true,
+						range: [1, 30]
+					}
+				},
+				submitHandler: function () {
+
+					tempContainer.ItemType = $('#containerType').val();
+					tempContainer.WeightInTonne = $('#containerWeight').val();
+
+					$.ajax({
+						url: '@Url.Action("CreateContainer")',
+						type: "POST",
+						data: JSON.stringify(tempContainer),
+						dataType: "json",
+						contentType: "application/json; charset=utf-8",
+						success: function(response) {
+							if (response != null && response.success) {
+								$('#containerList').append("<a href='' id='" +
+									response.newContainer.Id +
+									"' class='list-group-item'>" +
+									response.newContainer.ItemType +
+									" (" +
+									response.newContainer.WeightInTonne +
+									" t)</a>");
+								$('#containerType').val('');
+								$('#containerWeight').val('');
+
+								toastr.success(response.responseText);
+							} else {
+								toastr.error(response.responseText);
+							}
+						},
+						error: function(response) {
+							toastr.error("ERROR!");
+						}
+					});
+					return false;
+				}
+			});
+
+		});
+	</script>
+
+	@*<script>
+			function FillDestination() {
+				var origin = $('#Ship_Schedule_Origin :selected').text();
+				$.ajax({
+					url: '@Url.Action("FillDestination")',
+					type: "GET",
+					dataType: "JSON",
+					data: { origin: origin },
+					success: function (destinations) {
+						$("#Ship_Schedule_Destination").html("").append(
+							$('<option></option>').val('').html("-- To --")); // clear before appending new list
+						$.each(destinations, function (i, destination) {
+							$("#Ship_Schedule_Destination").append(
+								$('<option></option>').val(destination.Id).html(destination.Destination));
+						});
+					}
+				});
+			}
+
+			function FillTime() {
+				var origin = $('#Ship_Schedule_Origin :selected').text();
+				var destination = $('#Ship_Schedule_Destination :selected').text();
+				$.ajax({
+					url: '@Url.Action("FillTime")',
+					type: "GET",
+					dataType: "JSON",
+					data: {
+						origin: origin,
+						destination: destination
+					},
+					success: function (schedules) {
+						$("#Ship_ScheduleId").html("").append(
+							$('<option></option>').val('').html("-- Time Available --")); // clear before appending new list
+						$.each(schedules, function (i, schedule) {
+							$("#Ship_ScheduleId").append(
+								$('<option></option>').val(schedule.Id).html(JsonToJSTime(schedule.DepartureTime)));
+						});
+					}
+				});
+			}
+
+			function JsonToJSTime(jsonDateTime) {
+				var jsDate = new Date(jsonDateTime.match(/\d+/)[0] * 1); // Convert json to javascript datetime format
+
+				var date = jsDate.getDate();
+				var month = jsDate.getMonth() + 1;
+				var hours = jsDate.getHours();
+				var minutes = jsDate.getMinutes();
+				var ampm = hours >= 12 ? 'PM' : 'AM';
+
+				date = date < 10 ? '0' + date : date; // the date 0-9 should be 01-09
+				month = month < 10 ? '0' + month : month; // the month 0-9 should be 01-09
+				hours = hours % 12;
+				hours = hours ? hours : 12; // the hour '0' should be '12'
+				minutes = minutes < 10 ? '0' + minutes : minutes; // the minutes 0-9 should be 01-09
+
+				var strTime = hours + ':' + minutes + ' ' + ampm;
+
+				return month + "/" + date + "/" + jsDate.getFullYear() + "  " + strTime;
+			}
+		</script>*@
+}

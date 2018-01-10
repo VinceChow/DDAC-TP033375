@@ -47,4 +47,5 @@
 <div class="modal-footer">
 	<button type="button" class="btn btn-default" data-dismiss="modal">Back to List</button>
 	@Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-warning" })
+	@Html.ActionLink("Book", "New", "Bookings", new { id = Model.Id }, new { @class = "btn btn-success" })
 </div>

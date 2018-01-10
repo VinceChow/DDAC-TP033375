@@ -40,12 +40,15 @@ namespace DDAC_TP033375.Controllers
 			throw new NotImplementedException();
 		}
 
-		public ActionResult New()
+		public ActionResult New(/*int id*/)
 		{
-			ViewBag.Title = "New Booking";
-			ViewBag.Action = "Create";
+			int id = 1;
+			var viewModel = new BookingFormViewModel
+			{
+				Customer = _context.Customers.Single(c => c.Id == id)
+			};
 
-			return View("BookingForm", NewBookingFormViewModel());
+			return View(viewModel);
 		}
 
 		public ActionResult Edit(int id)
@@ -53,17 +56,42 @@ namespace DDAC_TP033375.Controllers
 			throw new NotImplementedException();
 		}
 
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult Create(BookingFormViewModel viewModel)
+		{
+			throw new NotImplementedException();
+		}
+
+		[HttpPost]
 		public ActionResult Archive(int id)
 		{
 			throw new NotImplementedException();
 		}
 
-		private BookingFormViewModel NewBookingFormViewModel()
+		[HttpPost]
+		public ActionResult CreateContainer(Container tempContainer)
 		{
-			return new BookingFormViewModel
+			var container = new Container
 			{
-				Customers = _context.Customers.ToList()
+				ItemType = tempContainer.ItemType,
+				WeightInTonne = tempContainer.WeightInTonne
 			};
+
+			_context.Containers.Add(container);
+
+			try
+			{
+				_context.SaveChanges();
+				var newContainer = _context.Containers.Find(container.Id);
+
+				return Json(new {newContainer, success = true, responseText = "Container created successfully." }, JsonRequestBehavior.AllowGet);
+			}
+			catch (Exception ex)
+			{
+				return Json(new { success = false, responseText = "Fail to create container.\nError: " + ex.Message }, JsonRequestBehavior.AllowGet);
+			}
 		}
+
 	}
 }
