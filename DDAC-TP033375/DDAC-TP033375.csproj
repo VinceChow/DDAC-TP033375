@@ -271,6 +271,10 @@
     <Compile Include="Migrations\201801101902169_RemoveBookingIdFromBooking.Designer.cs">
       <DependentUpon>201801101902169_RemoveBookingIdFromBooking.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201801110650495_AddAmountToContainer.cs" />
+    <Compile Include="Migrations\201801110650495_AddAmountToContainer.Designer.cs">
+      <DependentUpon>201801110650495_AddAmountToContainer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
@@ -447,6 +451,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201801101902169_RemoveBookingIdFromBooking.resx">
       <DependentUpon>201801101902169_RemoveBookingIdFromBooking.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801110650495_AddAmountToContainer.resx">
+      <DependentUpon>201801110650495_AddAmountToContainer.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

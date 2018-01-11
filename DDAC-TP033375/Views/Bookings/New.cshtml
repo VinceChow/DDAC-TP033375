@@ -21,6 +21,8 @@
 								<span class="glyphicon glyphicon-info-sign" aria-hidden="true" rel="tooltip" title="1 Tonne = 1000 Kilogram"></span>
 							</span>
 							<input id="containerWeight" name="containerWeight" class="form-control" type="text">
+							<span class="input-group-addon">Amount</span>
+							<input id="containerAmount" name="containerAmount" type="text" class="form-control">
 							<span class="input-group-btn">
 								<input type="submit" class="btn btn-default" value="Add">
 							</span>
@@ -29,15 +31,6 @@
 					<div class="row">
 						<div class="col-md-offset-1">
 							<div id="containerList" class="col-md-10 list-group">
-								<a href="#" class="list-group-item">
-									Cras justo odio
-								</a>
-								<a href="#" class="list-group-item">
-									Dapibus ac facilisis in
-								</a>
-								<a href="#" class="list-group-item">
-									Morbi leo risus
-								</a>
 							</div>
 						</div>
 					</div>
@@ -150,29 +143,40 @@
 		}
 
 		function fillOrigin() {
-			$.ajax({
-				url: '@Url.Action("FillOrigin")',
-				type: "GET",
-				dataType: "JSON",
-				data: {
-					numberOfContainer: numberOfContainer
-				},
-				success: function (origins) {
-					$("#bookingOrigin").html("").append(
-						$('<option></option>').val('').html("-- From --")); // clear before appending new list
-					$.each(origins, function (i, origin) {
-						$("#bookingOrigin").append(
-							$('<option></option>').val(origin.Id).html(origin.Origin));
-					});
+			if (numberOfContainer === 0) {
+				$("#bookingOrigin").html("").append(
+					$('<option></option>').val('').html("-- From --")); // clear before appending new list
+				$("#bookingDestination").html("").append(
+					$('<option></option>').val('').html("-- To --")); // clear before appending new list
+				$("#bookingDepartureTime").html("").append(
+					$('<option></option>').val('').html("-- Time Available --")); // clear before appending new list
+				$("#shipAvailable").html("").append(
+					$('<option></option>').val('').html("-- Ship Available --")); // clear before appending new list
+			} else {
+				$.ajax({
+					url: '@Url.Action("FillOrigin")',
+					type: "GET",
+					dataType: "JSON",
+					data: {
+						numberOfContainer: numberOfContainer
+					},
+					success: function (origins) {
+						$("#bookingOrigin").html("").append(
+							$('<option></option>').val('').html("-- From --")); // clear before appending new list
+						$.each(origins, function (i, origin) {
+							$("#bookingOrigin").append(
+								$('<option></option>').val(origin.Id).html(origin.Origin));
+						});
 
-					$("#bookingDestination").html("").append(
-						$('<option></option>').val('').html("-- To --")); // clear before appending new list
-					$("#bookingDepartureTime").html("").append(
-						$('<option></option>').val('').html("-- Time Available --")); // clear before appending new list
-					$("#shipAvailable").html("").append(
-						$('<option></option>').val('').html("-- Ship Available --")); // clear before appending new list
-				}
-			});
+						$("#bookingDestination").html("").append(
+							$('<option></option>').val('').html("-- To --")); // clear before appending new list
+						$("#bookingDepartureTime").html("").append(
+							$('<option></option>').val('').html("-- Time Available --")); // clear before appending new list
+						$("#shipAvailable").html("").append(
+							$('<option></option>').val('').html("-- Ship Available --")); // clear before appending new list
+					}
+				});
+			}
 		}
 
 		function fillDestination() {
@@ -281,6 +285,7 @@
 			var button = $(this);
 			var id = button.attr("id");
 			var info = button.attr("data-info");
+			var amount = button.attr("data-amount");
 
 			bootbox.confirm("Are you sure you want to delete this container, <strong>" + info + "</strong>?",
 				function (result) {
@@ -294,7 +299,7 @@
 								if (response != null && response.success) {
 									$('#' + id).remove();
 									viewModel.ContainerIds = removeArrayElement(viewModel.ContainerIds, id);
-									numberOfContainer--;
+									numberOfContainer -= parseInt(amount, 10);
 									fillOrigin();
 									toastr.success(response.responseText);
 								} else {
@@ -327,12 +332,18 @@
 						required: true,
 						number: true,
 						range: [1, 30]
+					},
+					containerAmount: {
+						required: true,
+						digits: true,
+						range: [1, 100]
 					}
 				},
 				submitHandler: function () {
 
 					tempContainer.ItemType = $('#containerType').val();
 					tempContainer.WeightInTonne = $('#containerWeight').val();
+					tempContainer.Amount = $('#containerAmount').val();
 
 					$.ajax({
 						url: '@Url.Action("CreateContainer")',
@@ -348,13 +359,16 @@
 
 								$('#containerList').append("<a href='#' id='" + response.newContainer.Id +
 									"' class='list-group-item js-delete' data-info='" + details +
-									"'>" + details + "</a>");
+									" (x" + response.newContainer.Amount + ")' data-amount='" +
+									response.newContainer.Amount + "'><span class='badge'>" +
+									response.newContainer.Amount + "</span>" + details + "</a>");
 
 								$('#containerType').val('');
 								$('#containerWeight').val('');
+								$('#containerAmount').val('');
 
 								viewModel.ContainerIds.push(response.newContainer.Id);
-								numberOfContainer++;
+								numberOfContainer += parseInt(tempContainer.Amount, 10);
 								fillOrigin();
 								toastr.success(response.responseText);
 							} else {
@@ -402,7 +416,20 @@
 						success: function(response) {
 							if (response != null && response.success) {
 
-								// TODO: Clear Model
+								numberOfContainer = 0;
+								viewModel = {
+									ContainerIds: []
+								};
+
+								$('#containerList').empty();
+								$("#bookingOrigin").html("").append(
+									$('<option></option>').val('').html("-- From --")); // clear before appending new list
+								$("#bookingDestination").html("").append(
+									$('<option></option>').val('').html("-- To --")); // clear before appending new list
+								$("#bookingDepartureTime").html("").append(
+									$('<option></option>').val('').html("-- Time Available --")); // clear before appending new list
+								$("#shipAvailable").html("").append(
+									$('<option></option>').val('').html("-- Ship Available --")); // clear before appending new list
 
 								toastr.success(response.responseText);
 							} else {

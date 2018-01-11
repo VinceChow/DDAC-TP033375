@@ -15,8 +15,12 @@ namespace DDAC_TP033375.Models
 		public string ItemType { get; set; }
 
 		[Required]
-		[Range(0, 30)]
+		[Range(1, 30)]
 		[Display(Name = "Weight (tonne/t)")]
 		public Double WeightInTonne { get; set; }
+
+		[Required]
+		[Range(1, 100)]
+		public int Amount { get; set; }
 	}
 }

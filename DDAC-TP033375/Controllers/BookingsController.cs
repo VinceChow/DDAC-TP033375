@@ -62,10 +62,28 @@ namespace DDAC_TP033375.Controllers
 		public ActionResult Create(BookingFormViewModel viewModel)
 		{
 			var containers = new List<Container>();
+			var shipInDb = _context.Ships.Single(s => s.Id == viewModel.ShipId);
+			var totalNumberOfContainer = 0;
 
 			foreach (var containerId in viewModel.ContainerIds)
 			{
 				containers.Add(_context.Containers.Find(containerId));
+			}
+
+			foreach (var container in containers)
+			{
+				totalNumberOfContainer += container.Amount;
+			}
+
+			try
+			{
+				shipInDb.Containers = containers;
+				shipInDb.NumberOfAvailableContainerBay -= totalNumberOfContainer;
+				_context.SaveChanges();
+			}
+			catch (Exception ex)
+			{
+				return Json(new { success = false, responseText = "Fail to update ship containers.\nError: " + ex.Message }, JsonRequestBehavior.AllowGet);
 			}
 
 			var booking = new Booking
@@ -74,7 +92,7 @@ namespace DDAC_TP033375.Controllers
 				Customer = _context.Customers.Find(viewModel.CustomerId),
 				Containers = containers,
 				Schedule = _context.Schedules.Find(viewModel.ScheduleId),
-				Ship = _context.Ships.Find(viewModel.ShipId),
+				Ship = shipInDb,
 				BookedAt = DateTime.Now
 			};
 
@@ -103,7 +121,8 @@ namespace DDAC_TP033375.Controllers
 			var container = new Container
 			{
 				ItemType = tempContainer.ItemType,
-				WeightInTonne = tempContainer.WeightInTonne
+				WeightInTonne = tempContainer.WeightInTonne,
+				Amount = tempContainer.Amount
 			};
 
 			_context.Containers.Add(container);
