@@ -5,7 +5,7 @@
 	<h4 class="modal-title" id="myModalLabel">Ship Details</h4>
 </div>
 <div class="modal-body">
-	<div class="panel panel-info">
+	<div class="panel panel-primary">
 		<div class="panel-heading">
 			<h3 class="panel-title">Ship</h3>
 		</div>
@@ -47,6 +47,30 @@
 					<div class="col-xs-5" style="text-align: right"><strong>@Html.DisplayNameFor(model => model.Schedule.ArrivalTime)</strong></div>
 					<div class="col-xs-7">@Html.DisplayFor(model => model.Schedule.ArrivalTime)</div>
 				</div>
+			</div>
+		</div>
+		<div class="panel panel-info">
+			<div class="panel-heading">
+				<h3 class="panel-title">Containers Assigned</h3>
+			</div>
+			<div class="panel-body">
+				<table class="table table-striped table-hover">
+					<thead>
+					<tr>
+						<th>Item Type</th>
+						<th>Weight (tonne/t)</th>
+						<th>Amount</th>
+					</tr>
+					</thead>
+					@foreach (var item in Model.Containers)
+					{
+						<tr>
+							<td>@Html.DisplayFor(modelItem => item.ItemType)</td>
+							<td>@Html.DisplayFor(modelItem => item.WeightInTonne)</td>
+							<td>@Html.DisplayFor(modelItem => item.Amount)</td>
+						</tr>
+					}
+				</table>
 			</div>
 		</div>
 	}

@@ -11,14 +11,16 @@
 	{
 		<div class="alert alert-dismissible alert-success">
 			<button type="button" class="close" data-dismiss="alert">&times;</button>
-			@ViewBag.Message @Html.ActionLink("Go to Schedule Index", "Index", new { }, new { @class = "alert-link" })
+			@Html.Raw(ViewBag.Message) 
+			<br /> 
+			@Html.ActionLink("Go to Schedule Index", "Index", new { }, new { @class = "alert-link" })
 		</div>
 	}
 	else
 	{
 		<div class="alert alert-dismissible alert-danger">
 			<button type="button" class="close" data-dismiss="alert">&times;</button>
-			@ViewBag.Message
+			@Html.Raw(ViewBag.Message)
 		</div>
 	}
 }

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using DDAC_TP033375.Models;
+using DDAC_TP033375.ViewModels;
 
 namespace DDAC_TP033375.Controllers
 {
@@ -24,6 +26,11 @@ namespace DDAC_TP033375.Controllers
 		// GET: Schedules
 		public ActionResult Index()
 		{
+			if (TempData["Message"] != null)
+			{
+				ViewBag.Message = TempData["Message"];
+			}
+
 			var schedules = _context.Schedules.ToList();
 
 			return View(schedules);
@@ -36,7 +43,13 @@ namespace DDAC_TP033375.Controllers
 			if (schedule == null)
 				return HttpNotFound();
 
-			return PartialView("_Details", schedule);
+			var viewModel = new ScheduleDetailsViewModel
+			{
+				Schedule = schedule,
+				Ships = _context.Ships.Where(s => s.ScheduleId == id).ToList()
+			};
+
+			return PartialView("_Details", viewModel);
 		}
 
 		public ActionResult New()
@@ -49,6 +62,15 @@ namespace DDAC_TP033375.Controllers
 
 		public ActionResult Edit(int id)
 		{
+			var ships = _context.Ships.Where(s => s.ScheduleId == id).ToList();
+
+			if (ships.Count != 0)
+			{
+				TempData["Message"] = "Unable to edit selected schedule.<br/><strong>Error:</strong> One or more ships have been assigned to the schedule.";
+
+				return RedirectToAction("Index");
+			}
+
 			ViewBag.Title = "Edit Schedule";
 			ViewBag.Action = "Update";
 
@@ -88,7 +110,7 @@ namespace DDAC_TP033375.Controllers
 			catch (Exception ex)
 			{
 				ViewBag.IsSuccess = false;
-				ViewBag.Message = "Create Failed.\nError: " + ex.Message;
+				ViewBag.Message = "Create Failed.<br/><strong>Error:</strong> " + ex.Message;
 				ModelState.Remove("DepartureTime");
 				ModelState.Remove("ArrivalTime");
 			}
@@ -132,7 +154,7 @@ namespace DDAC_TP033375.Controllers
 			catch (Exception ex)
 			{
 				ViewBag.IsSuccess = false;
-				ViewBag.Message = "Update Failed.\nError: " + ex.Message;
+				ViewBag.Message = "Update Failed.<br/><strong>Error:</strong> " + ex.Message;
 				ModelState.Remove("DepartureTime");
 				ModelState.Remove("ArrivalTime");
 			}
@@ -145,6 +167,17 @@ namespace DDAC_TP033375.Controllers
 		[HttpPost]
 		public ActionResult Delete(int id)
 		{
+			var ships = _context.Ships.Where(s => s.ScheduleId == id).ToList();
+
+			if (ships.Count != 0)
+			{
+				return Json(new
+				{
+					success = false,
+					responseText = "Unable to delete selected schedule.<br/><strong>Error:</strong> One or more ships have been assigned to this schedule."
+				}, JsonRequestBehavior.AllowGet);
+			}
+
 			var scheduleInDb = _context.Schedules.Single(s => s.Id == id);
 
 			if (scheduleInDb == null)
@@ -160,7 +193,7 @@ namespace DDAC_TP033375.Controllers
 			}
 			catch (Exception ex)
 			{
-				return Json(new { success = false, responseText = "Delete Failed.\nError: " + ex.Message }, JsonRequestBehavior.AllowGet);
+				return Json(new { success = false, responseText = "Delete Failed.<br/><strong>Error:</strong> " + ex.Message }, JsonRequestBehavior.AllowGet);
 			}
 		}
 

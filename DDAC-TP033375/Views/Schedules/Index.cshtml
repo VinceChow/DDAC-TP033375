@@ -4,7 +4,16 @@
 	ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+@if (ViewBag.Message != null)
+{
+	<div class="alert alert-dismissible alert-warning">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		<h4>Warning!</h4>
+		@Html.Raw(ViewBag.Message)
+	</div>
+}
+
+<h2>Schedules</h2>
 
 <p>
 	@Html.ActionLink("Create Schedule", "New", new { }, new { @class = "btn btn-success" })
@@ -47,7 +56,6 @@
 				@Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "label label-primary", data_toggle = "modal", data_target = "#scheduleDetailsModal" })
 				@Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "label label-warning" })
 				<a href="" class="label label-danger js-delete" data-id="@item.Id" data-info="@item.Origin (@item.DepartureTime) - @item.Destination (@item.ArrivalTime)">Delete</a>
-				@*@Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "label label-danger" })*@
 			</td>
 		</tr>
 	}

@@ -95,7 +95,7 @@ namespace DDAC_TP033375.Controllers
 			}
 			catch (Exception ex)
 			{
-				return Json(new { success = false, responseText = "Fail to update ship containers.\nError: " + ex.Message }, JsonRequestBehavior.AllowGet);
+				return Json(new { success = false, responseText = "Fail to update ship containers.<br/><strong>Error:</strong> " + ex.Message }, JsonRequestBehavior.AllowGet);
 			}
 
 			var booking = new Booking
@@ -117,7 +117,7 @@ namespace DDAC_TP033375.Controllers
 			}
 			catch (Exception ex)
 			{
-				return Json(new { success = false, responseText = "Booking Failed.\nError: " + ex.Message }, JsonRequestBehavior.AllowGet);
+				return Json(new { success = false, responseText = "Booking Failed.<br/><strong>Error:</strong> " + ex.Message }, JsonRequestBehavior.AllowGet);
 			}
 		}
 
@@ -148,7 +148,7 @@ namespace DDAC_TP033375.Controllers
 			}
 			catch (Exception ex)
 			{
-				return Json(new { success = false, responseText = "Fail to create container.\nError: " + ex.Message }, JsonRequestBehavior.AllowGet);
+				return Json(new { success = false, responseText = "Fail to create container.<br/><strong>Error:</strong> " + ex.Message }, JsonRequestBehavior.AllowGet);
 			}
 		}
 
@@ -198,7 +198,7 @@ namespace DDAC_TP033375.Controllers
 			var containerInDb = _context.Containers.Single(c => c.Id == id);
 
 			if (containerInDb == null)
-				return Json(new { success = false, responseText = "Delete Failed.\nError: Record not found." }, JsonRequestBehavior.AllowGet);
+				return Json(new { success = false, responseText = "Delete Failed.<br/><strong>Error:</strong> Record not found." }, JsonRequestBehavior.AllowGet);
 
 			_context.Containers.Remove(containerInDb);
 
@@ -210,7 +210,7 @@ namespace DDAC_TP033375.Controllers
 			}
 			catch (Exception ex)
 			{
-				return Json(new { success = false, responseText = "Delete Failed.\nError: " + ex.Message }, JsonRequestBehavior.AllowGet);
+				return Json(new { success = false, responseText = "Delete Failed.<br/><strong>Error:</strong> " + ex.Message }, JsonRequestBehavior.AllowGet);
 			}
 		}
 

@@ -27,6 +27,11 @@ namespace DDAC_TP033375.Controllers
 		// GET: Ships
 		public ActionResult Index()
 		{
+			if (TempData["Message"] != null)
+			{
+				ViewBag.Message = TempData["Message"];
+			}
+
 			var ships = _context.Ships.ToList();
 
 			return View(ships);
@@ -34,7 +39,10 @@ namespace DDAC_TP033375.Controllers
 
 		public ActionResult Details(int id)
 		{
-			var ship = _context.Ships.Include(s => s.Schedule).SingleOrDefault(s => s.Id == id);
+			var ship = _context.Ships
+				.Include(s => s.Schedule)
+				.Include(s => s.Containers)
+				.SingleOrDefault(s => s.Id == id);
 
 			if (ship == null)
 				return HttpNotFound();
@@ -52,13 +60,20 @@ namespace DDAC_TP033375.Controllers
 
 		public ActionResult Edit(int id)
 		{
-			ViewBag.Title = "Edit Ship";
-			ViewBag.Action = "Update";
-
 			var ship = _context.Ships.Include(s => s.Schedule).SingleOrDefault(s => s.Id == id);
 
 			if (ship == null)
 				return HttpNotFound();
+
+			if (ship.IsScheduled)
+			{
+				TempData["Message"] = "Unable to edit selected ship.<br/><strong>Error:</strong> A schedule has been assigned to this ship.";
+
+				return RedirectToAction("Index");
+			}
+
+			ViewBag.Title = "Edit Ship";
+			ViewBag.Action = "Update";
 
 			return View("ShipForm", ExistingShipFormViewModel(ship));
 		}
@@ -97,7 +112,7 @@ namespace DDAC_TP033375.Controllers
 			catch (Exception ex)
 			{
 				ViewBag.IsSuccess = false;
-				ViewBag.Message = "Fail to add ship.\nError: " + ex.Message;
+				ViewBag.Message = "Fail to add ship.<br/><strong>Error:</strong> " + ex.Message;
 			}
 
 			return View("ShipForm", viewModel);
@@ -130,7 +145,7 @@ namespace DDAC_TP033375.Controllers
 			if (ship.NumberOfContainerBay < numberOfUnavailableContainerBay)
 			{
 				ViewBag.IsSuccess = false;
-				ViewBag.Message = "Update Failed.\nError: This ship currently has " + numberOfUnavailableContainerBay + " container bays in used.";
+				ViewBag.Message = "Update Failed.<br/><strong>Error:</strong> This ship currently has " + numberOfUnavailableContainerBay + " container bays in used.";
 
 				return View("ShipForm", ExistingShipFormViewModel(shipInDb));
 			}
@@ -154,7 +169,7 @@ namespace DDAC_TP033375.Controllers
 			catch (Exception ex)
 			{
 				ViewBag.IsSuccess = false;
-				ViewBag.Message = "Update Failed.\nError: " + ex.Message;
+				ViewBag.Message = "Update Failed.<br/><strong>Error:</strong> " + ex.Message;
 			}
 
 			var newShipInDb = _context.Ships.Include(s => s.Schedule).Single(s => s.Id == ship.Id);
@@ -170,6 +185,15 @@ namespace DDAC_TP033375.Controllers
 			if (shipInDb == null)
 				return HttpNotFound();
 
+			if (shipInDb.IsScheduled)
+			{
+				return Json(new
+				{
+					success = false,
+					responseText = "Unable to delete selected ship.<br/><strong>Error:</strong> A schedule has been assigned to this ship."
+				}, JsonRequestBehavior.AllowGet);
+			}
+
 			_context.Ships.Remove(shipInDb);
 
 			try
@@ -180,7 +204,7 @@ namespace DDAC_TP033375.Controllers
 			}
 			catch (Exception ex)
 			{
-				return Json(new { success = false, responseText = "Delete Failed.\nError: " + ex.Message }, JsonRequestBehavior.AllowGet);
+				return Json(new { success = false, responseText = "Delete Failed.<br/><strong>Error:</strong> " + ex.Message }, JsonRequestBehavior.AllowGet);
 			}
 		}
 
