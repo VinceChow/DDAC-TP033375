@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 namespace DDAC_TP033375.Controllers
 {
+	[AllowAnonymous]
 	public class HomeController : Controller
 	{
 		public ActionResult Index()

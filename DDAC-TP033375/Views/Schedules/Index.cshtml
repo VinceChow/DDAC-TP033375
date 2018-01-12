@@ -65,6 +65,24 @@
 @section scripts
 {
 	<script>
+		toastr.options = {
+			"closeButton": true,
+			"debug": false,
+			"newestOnTop": true,
+			"progressBar": true,
+			"positionClass": "toast-top-right",
+			"preventDuplicates": true,
+			"onclick": null,
+			"showDuration": "300",
+			"hideDuration": "1000",
+			"timeOut": "10000",
+			"extendedTimeOut": "10000",
+			"showEasing": "swing",
+			"hideEasing": "linear",
+			"showMethod": "fadeIn",
+			"hideMethod": "fadeOut"
+		}
+
 		$(document).on('hidden.bs.modal', function (e) {
 			$(e.target).removeData('bs.modal');
 		});

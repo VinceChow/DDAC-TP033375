@@ -27,9 +27,28 @@ namespace DDAC_TP033375.Controllers
 		// GET: Customers
 		public ActionResult Index()
 		{
-			var customers = _context.Customers
-				.Include(c => c.RegisteredBy)
-				.ToList();
+			if (TempData["Message"] != null)
+			{
+				ViewBag.Message = TempData["Message"];
+			}
+
+			List<Customer> customers;
+
+			if (User.IsInRole(RoleName.Admin))
+			{
+				customers = _context.Customers
+					.Include(c => c.RegisteredBy)
+					.ToList();
+			}
+			else
+			{
+				var currentUser = _context.Users.Find(User.Identity.GetUserId());
+
+				customers = _context.Customers
+					.Include(c => c.RegisteredBy)
+					.Where(c => c.RegisteredBy.CompanyName.Equals(currentUser.CompanyName))
+					.ToList();
+			}
 
 			return View(customers);
 		}
@@ -54,8 +73,7 @@ namespace DDAC_TP033375.Controllers
 
 		public ActionResult Edit(int id)
 		{
-			ViewBag.Title = "Edit Customer";
-			ViewBag.Action = "Update";
+			var currentUser = _context.Users.Find(User.Identity.GetUserId());
 
 			var customer = _context.Customers
 				.Include(c => c.RegisteredBy)
@@ -63,6 +81,16 @@ namespace DDAC_TP033375.Controllers
 
 			if (customer == null)
 				return HttpNotFound();
+
+			if (!currentUser.CompanyName.Equals(customer.RegisteredBy.CompanyName))
+			{
+				TempData["Message"] = "The customer you are going to edit is not registered under your company.";
+
+				return RedirectToAction("Index");
+			}
+
+			ViewBag.Title = "Edit Customer";
+			ViewBag.Action = "Update";
 
 			return View("CustomerForm", customer);
 		}

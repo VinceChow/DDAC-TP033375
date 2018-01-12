@@ -53,8 +53,15 @@ namespace DDAC_TP033375.Controllers
 			return PartialView("_Details", booking);
 		}
 
-		public ActionResult New(int id)
+		public ActionResult New(int? id)
 		{
+			if (id == null)
+			{
+				TempData["Message"] = "Please select an existing customer or create a new one before proceeding to create booking.";
+
+				return RedirectToAction("Index", "Customers");
+			}
+
 			var viewModel = new BookingFormViewModel
 			{
 				Customer = _context.Customers.Single(c => c.Id == id)
@@ -62,11 +69,6 @@ namespace DDAC_TP033375.Controllers
 
 			return View(viewModel);
 		}
-
-		//public ActionResult Edit(int id)
-		//{
-		//	throw new NotImplementedException();
-		//}
 
 		[HttpPost]
 		public ActionResult Create(BookingFormViewModel viewModel)
