@@ -28,11 +28,27 @@ namespace DDAC_TP033375.Controllers
 		// GET: Bookings
 		public ActionResult Index()
 		{
-			var bookings = _context.Bookings
-				.Include(b => b.BookedBy)
-				.Include(b => b.Customer)
-				.Include(b => b.Ship.Schedule)
-				.ToList();
+			List<Booking> bookings;
+
+			if (User.IsInRole(RoleName.Admin))
+			{
+				bookings = _context.Bookings
+					.Include(b => b.BookedBy)
+					.Include(b => b.Customer)
+					.Include(b => b.Ship.Schedule)
+					.ToList();
+			}
+			else
+			{
+				var currentUser = _context.Users.Find(User.Identity.GetUserId());
+
+				bookings = _context.Bookings
+					.Include(b => b.BookedBy)
+					.Include(b => b.Customer)
+					.Include(b => b.Ship.Schedule)
+					.Where(b => b.BookedBy.CompanyName.Equals(currentUser.CompanyName))
+					.ToList();
+			}
 
 			return View(bookings);
 		}
