@@ -45,13 +45,33 @@
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Manage <span class="caret"></span></a>
 							<ul class="dropdown-menu" role="menu">
-								<li>@Html.ActionLink("Schedules", "Index", "Schedules")</li>
-								<li>@Html.ActionLink("Ships", "Index", "Ships")</li>
+								<li>
+									<a href="@Url.Action("Index", "Schedules")">
+										<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>&nbsp;&nbsp;&nbsp;&nbsp;Schedules
+									</a>
+								</li>
+								<li>
+									<a href="@Url.Action("Index", "Ships")">
+										<span class="glyphicon glyphicon-globe" aria-hidden="true"></span>&nbsp;&nbsp;&nbsp;&nbsp;Ships
+									</a>
+								</li>
 								<li class="divider"></li>
-								@*<li>@Html.ActionLink("Agents", "Index", "Agent")</li>*@
-								<li>@Html.ActionLink("Customers", "Index", "Customers")</li>
+								@*<li>
+									<a href="@Url.Action("Index", "Agents")">
+										<span class="glyphicon glyphicon-briefcase" aria-hidden="true"></span>&nbsp;&nbsp;&nbsp;&nbsp;Agents
+									</a>
+								</li>*@
+								<li>
+									<a href="@Url.Action("Index", "Customers")">
+										<span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;&nbsp;&nbsp;&nbsp;Customers
+									</a>
+								</li>
 								<li class="divider"></li>
-								<li>@Html.ActionLink("Bookings", "Index", "Bookings")</li>
+								<li>
+									<a href="@Url.Action("Index", "Bookings")">
+										<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>&nbsp;&nbsp;&nbsp;&nbsp;Bookings
+									</a>
+								</li>
 							</ul>
 						</li>
 					}
