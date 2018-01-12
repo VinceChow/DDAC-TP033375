@@ -40,21 +40,25 @@
 				<li>@Html.ActionLink("Home", "Index", "Home")</li>
 				@if (User.Identity.IsAuthenticated)
 				{
+					if (User.IsInRole(RoleName.Admin))
+					{
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Manage <span class="caret"></span></a>
+							<ul class="dropdown-menu" role="menu">
+								<li>@Html.ActionLink("Schedules", "Index", "Schedules")</li>
+								<li>@Html.ActionLink("Ships", "Index", "Ships")</li>
+								<li class="divider"></li>
+								@*<li>@Html.ActionLink("Agents", "Index", "Agent")</li>*@
+								<li>@Html.ActionLink("Customers", "Index", "Customers")</li>
+							</ul>
+						</li>
+					}
+					else
+					{
+						<li>@Html.ActionLink("Customers", "Index", "Customers")</li>
+					}
 					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Module <span class="caret"></span></a>
-						<ul class="dropdown-menu" role="menu">
-							<li>@Html.ActionLink("Schedules", "Index", "Schedules")</li>
-							<li>@Html.ActionLink("Ships", "Index", "Ships")</li>
-							<li class="divider">Divider</li>
-							@if (User.IsInRole(RoleName.Admin))
-							{
-							@*<li>@Html.ActionLink("Agents", "Index", "Agent")</li>*@
-							}
-							<li>@Html.ActionLink("Customers", "Index", "Customers")</li>
-						</ul>
-					</li>
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Booking <span class="caret"></span></a>
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Bookings <span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
 							<li>@Html.ActionLink("Index", "Index", "Bookings")</li>
 							<li class="divider"></li>
