@@ -66,7 +66,7 @@ namespace DDAC_TP033375.Controllers
 			if (booking == null)
 				return HttpNotFound();
 
-			ViewBag.PercentageCompleted = calPercentageCompleted(booking);
+			ViewBag.PercentageCompleted = CalPercentageCompleted(booking);
 
 			return PartialView("_Details", booking);
 		}
@@ -241,13 +241,23 @@ namespace DDAC_TP033375.Controllers
 				.ToList();
 		}
 
-		private int calPercentageCompleted(Booking booking)
+		private static int CalPercentageCompleted(Booking booking)
 		{
 			var ending = (booking.Schedule.ArrivalTime - booking.Schedule.DepartureTime).TotalSeconds;
 			var completed = (DateTime.Now - booking.Schedule.DepartureTime).TotalSeconds;
 			var percentageCompleted = (completed / ending) * 100;
 
-			return percentageCompleted > 100 ? 100 : (int) percentageCompleted;
+			if (percentageCompleted < 0)
+			{
+				return 0;
+			}
+
+			if (percentageCompleted > 100)
+			{
+				return 100;
+			}
+
+			return (int) percentageCompleted;
 		}
 	}
 }
