@@ -355,13 +355,13 @@
 							if (response != null && response.success) {
 
 								var details = response.newContainer.ItemType + " (" +
-									response.newContainer.WeightInTonne + " t)";
+									response.newContainer.WeightInTonne + " tonne)";
 
 								$('#containerList').append("<a href='#' id='" + response.newContainer.Id +
 									"' class='list-group-item js-delete' data-info='" + details +
 									" (x" + response.newContainer.Amount + ")' data-amount='" +
 									response.newContainer.Amount + "'><span class='badge'>" +
-									response.newContainer.Amount + "</span>" + details + "</a>");
+									response.newContainer.Amount + "</span><strong>" + details + "</strong></a>");
 
 								$('#containerType').val('');
 								$('#containerWeight').val('');

@@ -22,7 +22,7 @@ namespace DDAC_TP033375.Models
 		public Ship Ship { get; set; }
 
 		[Display(Name = "Booked At (mm/dd/yyyy)")]
-		[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{MM/dd/yyyy h:mm tt}")]
+		[DisplayFormat(DataFormatString = "{0:MM/dd/yyyy h:mm tt}")]
 		public DateTime BookedAt { get; set; }
 	}
 }

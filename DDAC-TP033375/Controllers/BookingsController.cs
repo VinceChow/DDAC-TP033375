@@ -39,12 +39,22 @@ namespace DDAC_TP033375.Controllers
 
 		public ActionResult Details(int id)
 		{
-			throw new NotImplementedException();
+			var booking = _context.Bookings
+				.Include(b => b.BookedBy)
+				.Include(b => b.Customer)
+				.Include(b => b.Containers)
+				.Include(b => b.Schedule)
+				.Include(b => b.Ship)
+				.SingleOrDefault(b => b.Id == id);
+
+			if (booking == null)
+				return HttpNotFound();
+
+			return PartialView("_Details", booking);
 		}
 
-		public ActionResult New(/*int id*/)
+		public ActionResult New(int id)
 		{
-			int id = 1;
 			var viewModel = new BookingFormViewModel
 			{
 				Customer = _context.Customers.Single(c => c.Id == id)
@@ -53,10 +63,10 @@ namespace DDAC_TP033375.Controllers
 			return View(viewModel);
 		}
 
-		public ActionResult Edit(int id)
-		{
-			throw new NotImplementedException();
-		}
+		//public ActionResult Edit(int id)
+		//{
+		//	throw new NotImplementedException();
+		//}
 
 		[HttpPost]
 		public ActionResult Create(BookingFormViewModel viewModel)
