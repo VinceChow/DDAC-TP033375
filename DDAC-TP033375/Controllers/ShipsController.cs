@@ -96,6 +96,14 @@ namespace DDAC_TP033375.Controllers
 				return View("ShipForm", viewModel);
 			}
 
+			if (_context.Ships.Where(s => s.Name == ship.Name).ToList().Count != 0)
+			{
+				ViewBag.IsSuccess = false;
+				ViewBag.Message = "Fail to add ship.<br/><strong>Error:</strong> This ship name has already been registered.";
+
+				return View("ShipForm", viewModel);
+			}
+
 			ship.Schedule = null;
 			ship.NumberOfAvailableContainerBay = ship.NumberOfContainerBay;
 			ship.IsScheduled = true;
@@ -135,6 +143,15 @@ namespace DDAC_TP033375.Controllers
 			{
 				ViewBag.IsSuccess = false;
 				ViewBag.Message = "Update Failed.";
+
+				return View("ShipForm", ExistingShipFormViewModel(shipInDb));
+			}
+
+			if (_context.Ships.Where(s => s.Id != ship.Id)
+				    .Where(s => s.Name == ship.Name).ToList().Count != 0)
+			{
+				ViewBag.IsSuccess = false;
+				ViewBag.Message = "Fail to add ship.<br/><strong>Error:</strong> This ship name has already been registered.";
 
 				return View("ShipForm", ExistingShipFormViewModel(shipInDb));
 			}
