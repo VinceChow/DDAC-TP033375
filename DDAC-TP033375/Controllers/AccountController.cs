@@ -137,7 +137,7 @@ namespace DDAC_TP033375.Controllers
 
 		//
 		// GET: /Account/Register
-		[AllowAnonymous]
+		//[AllowAnonymous]
 		public ActionResult Register()
 		{
 			return View();
@@ -169,7 +169,8 @@ namespace DDAC_TP033375.Controllers
 					//await roleManager.CreateAsync(new IdentityRole("Admin"));
 					//await UserManager.AddToRoleAsync(user.Id, "Admin");
 
-					await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
+					// Prevent admin/agent registration from auto login
+					//await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
 					
 					// For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
 					// Send an email with this link
@@ -177,12 +178,21 @@ namespace DDAC_TP033375.Controllers
 					// var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
 					// await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-					return RedirectToAction("Index", "Home");
+					//return RedirectToAction("Index", "Home");
+
+					ViewBag.IsSuccess = true;
+					ViewBag.Message = "Agent account has been created successfully.";
+					ModelState.Clear();
+
+					return View("Register");
 				}
 				AddErrors(result);
 			}
 
 			// If we got this far, something failed, redisplay form
+			ViewBag.IsSuccess = false;
+			ViewBag.Message = "Agent account registration failed.";
+
 			return View(model);
 		}
 

@@ -3,6 +3,26 @@
 	ViewBag.Title = "Register";
 }
 
+@if (ViewBag.IsSuccess != null)
+{
+	if (ViewBag.IsSuccess)
+	{
+		<div class="alert alert-dismissible alert-success">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			@Html.Raw(ViewBag.Message)
+			@*<br />*@
+			@*@Html.ActionLink("Go to Ship Index", "Index", new { }, new { @class = "alert-link" })*@
+		</div>
+	}
+	else
+	{
+		<div class="alert alert-dismissible alert-danger">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			@Html.Raw(ViewBag.Message)
+		</div>
+	}
+}
+
 <h2>@ViewBag.Title.</h2>
 
 @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
