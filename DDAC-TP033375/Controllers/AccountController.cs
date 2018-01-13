@@ -138,6 +138,7 @@ namespace DDAC_TP033375.Controllers
 		//
 		// GET: /Account/Register
 		//[AllowAnonymous]
+		[Authorize(Roles = RoleName.Admin)]
 		public ActionResult Register()
 		{
 			return View();
@@ -146,7 +147,8 @@ namespace DDAC_TP033375.Controllers
 		//
 		// POST: /Account/Register
 		[HttpPost]
-		[AllowAnonymous]
+		//[AllowAnonymous]
+		[Authorize(Roles = RoleName.Admin)]
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> Register(RegisterViewModel model)
 		{
@@ -184,7 +186,7 @@ namespace DDAC_TP033375.Controllers
 					ViewBag.Message = "Agent account has been created successfully.";
 					ModelState.Clear();
 
-					return View("Register");
+					return View();
 				}
 				AddErrors(result);
 			}
