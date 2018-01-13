@@ -110,6 +110,15 @@ namespace DDAC_TP033375.Controllers
 				return View("CustomerForm");
 			}
 
+			if (_context.Customers.Where(c => c.Email == customer.Email)
+				    .ToList().Count != 0)
+			{
+				ViewBag.IsSuccess = false;
+				ViewBag.Message = "Fail to add customer.<br/><strong>Error:</strong> This customer email has already been registered.";
+
+				return View("CustomerForm");
+			}
+
 			var currentUser = _context.Users.Find(User.Identity.GetUserId());
 			customer.RegisteredBy = currentUser;
 
@@ -148,6 +157,16 @@ namespace DDAC_TP033375.Controllers
 			{
 				ViewBag.IsSuccess = false;
 				ViewBag.Message = "Update Failed.";
+
+				return View("CustomerForm", customerInDb);
+			}
+
+			if (_context.Customers.Where(c => c.Id != customer.Id)
+				    .Where(c => c.Email == customer.Email)
+				    .ToList().Count != 0)
+			{
+				ViewBag.IsSuccess = false;
+				ViewBag.Message = "Fail to update customer.<br/><strong>Error:</strong> This customer email has already been registered.";
 
 				return View("CustomerForm", customerInDb);
 			}
