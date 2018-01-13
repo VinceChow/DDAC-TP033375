@@ -16,6 +16,7 @@ namespace DDAC_TP033375.Models
 
 		[Required]
 		[StringLength(255)]
+		[Display(Name = "Company Name")]
 		public string CompanyName { get; set; }
 
 		public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
