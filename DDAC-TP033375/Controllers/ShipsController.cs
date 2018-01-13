@@ -151,7 +151,7 @@ namespace DDAC_TP033375.Controllers
 				    .Where(s => s.Name == ship.Name).ToList().Count != 0)
 			{
 				ViewBag.IsSuccess = false;
-				ViewBag.Message = "Fail to add ship.<br/><strong>Error:</strong> This ship name has already been registered.";
+				ViewBag.Message = "Fail to update ship.<br/><strong>Error:</strong> This ship name has already been registered.";
 
 				return View("ShipForm", ExistingShipFormViewModel(shipInDb));
 			}

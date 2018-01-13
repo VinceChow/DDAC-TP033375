@@ -98,6 +98,26 @@ namespace DDAC_TP033375.Controllers
 				return View("ScheduleForm");
 			}
 
+			if (schedule.Origin.Equals(schedule.Destination))
+			{
+				ViewBag.IsSuccess = false;
+				ViewBag.Message = "Fail to add schedule.<br/><strong>Error:</strong> Origin and Destination cannot be same.";
+
+				return View("ScheduleForm");
+			}
+
+			if (_context.Schedules.Where(s => s.Origin == schedule.Origin && 
+			                                  s.Destination == schedule.Destination &&
+			                                  s.DepartureTime == schedule.DepartureTime &&
+			                                  s.ArrivalTime == schedule.ArrivalTime)
+				    .ToList().Count != 0)
+			{
+				ViewBag.IsSuccess = false;
+				ViewBag.Message = "Fail to add schedule.<br/><strong>Error:</strong> This schedule has already been created.";
+
+				return View("ScheduleForm");
+			}
+
 			_context.Schedules.Add(schedule);
 
 			try
@@ -135,6 +155,27 @@ namespace DDAC_TP033375.Controllers
 			{
 				ViewBag.IsSuccess = false;
 				ViewBag.Message = "Update Failed.";
+
+				return View("ScheduleForm", scheduleInDb);
+			}
+
+			if (schedule.Origin.Equals(schedule.Destination))
+			{
+				ViewBag.IsSuccess = false;
+				ViewBag.Message = "Fail to update schedule.<br/><strong>Error:</strong> Origin and Destination cannot be same.";
+
+				return View("ScheduleForm", scheduleInDb);
+			}
+
+			if (_context.Schedules.Where(s => s.Id != schedule.Id)
+				    .Where(s => s.Origin == schedule.Origin && 
+				                s.Destination == schedule.Destination &&
+				                s.DepartureTime == schedule.DepartureTime &&
+				                s.ArrivalTime == schedule.ArrivalTime)
+				    .ToList().Count != 0)
+			{
+				ViewBag.IsSuccess = false;
+				ViewBag.Message = "Fail to update schedule.<br/><strong>Error:</strong> This schedule has already been created.";
 
 				return View("ScheduleForm", scheduleInDb);
 			}
