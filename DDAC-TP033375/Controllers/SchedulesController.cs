@@ -106,6 +106,14 @@ namespace DDAC_TP033375.Controllers
 				return View("ScheduleForm");
 			}
 
+			if ((schedule.ArrivalTime - schedule.DepartureTime).TotalSeconds <= 0)
+			{
+				ViewBag.IsSuccess = false;
+				ViewBag.Message = "Fail to add schedule.<br/><strong>Error:</strong> Arrival Time cannot be earlier than departure time.";
+
+				return View("ScheduleForm");
+			}
+
 			if (_context.Schedules.Where(s => s.Origin == schedule.Origin && 
 			                                  s.Destination == schedule.Destination &&
 			                                  s.DepartureTime == schedule.DepartureTime &&
@@ -163,6 +171,14 @@ namespace DDAC_TP033375.Controllers
 			{
 				ViewBag.IsSuccess = false;
 				ViewBag.Message = "Fail to update schedule.<br/><strong>Error:</strong> Origin and Destination cannot be same.";
+
+				return View("ScheduleForm", scheduleInDb);
+			}
+
+			if ((schedule.ArrivalTime - schedule.DepartureTime).TotalSeconds <= 0)
+			{
+				ViewBag.IsSuccess = false;
+				ViewBag.Message = "Fail to update schedule.<br/><strong>Error:</strong> Arrival Time cannot be earlier than departure time.";
 
 				return View("ScheduleForm", scheduleInDb);
 			}
