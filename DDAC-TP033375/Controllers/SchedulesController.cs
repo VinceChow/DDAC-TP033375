@@ -9,6 +9,7 @@ using DDAC_TP033375.ViewModels;
 
 namespace DDAC_TP033375.Controllers
 {
+	[Authorize(Roles = RoleName.Admin)]
 	public class SchedulesController : Controller
 	{
 		private ApplicationDbContext _context;

@@ -10,6 +10,7 @@ using Microsoft.Ajax.Utilities;
 
 namespace DDAC_TP033375.Controllers
 {
+	[Authorize(Roles = RoleName.Admin)]
 	public class ShipsController : Controller
 	{
 		private ApplicationDbContext _context;
