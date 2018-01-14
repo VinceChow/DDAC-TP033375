@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -18,6 +20,9 @@ namespace DDAC_TP033375.Models
 		[StringLength(255)]
 		[Display(Name = "Company Name")]
 		public string CompanyName { get; set; }
+
+		[Required]
+		public Boolean IsEnabled { get; set; }
 
 		public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
 		{

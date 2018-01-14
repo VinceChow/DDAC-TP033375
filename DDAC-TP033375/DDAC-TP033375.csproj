@@ -276,6 +276,10 @@
     <Compile Include="Migrations\201801110650495_AddAmountToContainer.Designer.cs">
       <DependentUpon>201801110650495_AddAmountToContainer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201801140654367_AddIsEnabledToAgents.cs" />
+    <Compile Include="Migrations\201801140654367_AddIsEnabledToAgents.Designer.cs">
+      <DependentUpon>201801140654367_AddIsEnabledToAgents.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
@@ -694,6 +698,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201801110650495_AddAmountToContainer.resx">
       <DependentUpon>201801110650495_AddAmountToContainer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801140654367_AddIsEnabledToAgents.resx">
+      <DependentUpon>201801140654367_AddIsEnabledToAgents.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

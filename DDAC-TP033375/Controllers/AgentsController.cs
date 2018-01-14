@@ -42,5 +42,41 @@ namespace DDAC_TP033375.Controllers
 
 			return View(agents);
 		}
+
+		public ActionResult Disable(string id)
+		{
+			var agentInDb = _context.Users.Single(u => u.Id == id);
+
+			agentInDb.IsEnabled = false;
+
+			try
+			{
+				_context.SaveChanges();
+
+				return Json(new { success = true, responseText = "Agent account has been disabled successfully." }, JsonRequestBehavior.AllowGet);
+			}
+			catch (Exception ex)
+			{
+				return Json(new { success = false, responseText = "Fail to disable agent account.<br/><strong>Error:</strong> " + ex.Message }, JsonRequestBehavior.AllowGet);
+			}
+		}
+
+		public ActionResult Enable(string id)
+		{
+			var agentInDb = _context.Users.Single(u => u.Id == id);
+
+			agentInDb.IsEnabled = true;
+
+			try
+			{
+				_context.SaveChanges();
+
+				return Json(new { success = true, responseText = "Agent account has been enabled successfully." }, JsonRequestBehavior.AllowGet);
+			}
+			catch (Exception ex)
+			{
+				return Json(new { success = false, responseText = "Fail to enable agent account.<br/><strong>Error:</strong> " + ex.Message }, JsonRequestBehavior.AllowGet);
+			}
+		}
 	}
 }

@@ -96,7 +96,7 @@
 		});
 
 		$(document).ready(function () {
-			$('#schedules').DataTable();
+			var table = $('#schedules').DataTable();
 
 			$("#schedules").on("click", ".js-delete", function (e) {
 				e.preventDefault();
@@ -115,8 +115,8 @@
 								contentType: "application/json; charset=utf-8",
 								success: function (response) {
 									if (response != null && response.success) {
-										button.parents("tr").remove();
-										//table.row(button.parents("tr")).remove().draw();
+										//button.parents("tr").remove();
+										table.row(button.parents("tr")).remove().draw();
 										toastr.success(response.responseText);
 									} else {
 										toastr.error(response.responseText);

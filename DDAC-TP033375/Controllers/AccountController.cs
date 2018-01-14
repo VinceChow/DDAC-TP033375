@@ -19,8 +19,11 @@ namespace DDAC_TP033375.Controllers
 		private ApplicationSignInManager _signInManager;
 		private ApplicationUserManager _userManager;
 
+		private ApplicationDbContext _context;
+
 		public AccountController()
 		{
+			_context = new ApplicationDbContext();
 		}
 
 		public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
@@ -72,6 +75,15 @@ namespace DDAC_TP033375.Controllers
 			if (!ModelState.IsValid)
 			{
 				return View(model);
+			}
+
+			if (!_context.Users.First(u => u.Email.Equals(model.Email)).IsEnabled)
+			{
+				ViewBag.IsSuccess = false;
+				ViewBag.Message = "Your agent account has been disabled. Please contact support.";
+				ViewBag.ReturnUrl = returnUrl;
+
+				return View();
 			}
 
 			// This doesn't count login failures towards account lockout
@@ -160,7 +172,8 @@ namespace DDAC_TP033375.Controllers
 					Email = model.Email,
 					Name = model.Name,
 					PhoneNumber = model.PhoneNumber,
-					CompanyName = model.CompanyName
+					CompanyName = model.CompanyName,
+					IsEnabled = true
 				};
 				var result = await UserManager.CreateAsync(user, model.Password);
 				if (result.Succeeded)
@@ -431,6 +444,8 @@ namespace DDAC_TP033375.Controllers
 
 		protected override void Dispose(bool disposing)
 		{
+			_context.Dispose();
+
 			if (disposing)
 			{
 				if (_userManager != null)
