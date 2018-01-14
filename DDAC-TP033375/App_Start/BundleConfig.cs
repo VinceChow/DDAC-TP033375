@@ -19,7 +19,10 @@ namespace DDAC_TP033375
 						"~/Scripts/bootbox.js",
 						"~/Scripts/respond.js",
 						// toastr
-						"~/Scripts/toastr.js"));
+						"~/Scripts/toastr.js",
+						// Datatables
+						"~/Scripts/DataTables/jquery.dataTables.js",
+						"~/Scripts/DataTables/dataTables.bootstrap.js"));
 
 			bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
 						"~/Scripts/jquery.validate*"));
@@ -34,7 +37,8 @@ namespace DDAC_TP033375
 						"~/Content/custom-theme.css",
 						"~/Content/site.css",
 						"~/Content/bootstrap-datetimepicker.css",
-						"~/Content/toastr.css"));
+						"~/Content/toastr.css",
+						"~/Content/DataTables/css/dataTables.bootstrap.css"));
 		}
 	}
 }
