@@ -66,13 +66,37 @@
 				<div class="form-group">
 					@Html.LabelFor(s => s.Origin, new { @class = "col-md-5 control-label" })
 					<div class="col-md-7">
-						@Html.TextBoxFor(s => s.Origin, new { @class = "form-control" })
+						@Html.DropDownListFor(s => s.Origin,
+							new List<SelectListItem> {
+								new SelectListItem { Value = "China", Text = "China" },
+								new SelectListItem { Value = "Hong Kong", Text = "Hong Kong" },
+								new SelectListItem { Value = "India", Text = "India" },
+								new SelectListItem { Value = "Indonesia", Text = "Indonesia" },
+								new SelectListItem { Value = "Japan", Text = "Japan" },
+								new SelectListItem { Value = "Malaysia", Text = "Malaysia" },
+								new SelectListItem { Value = "Singapore", Text = "Singapore" },
+								new SelectListItem { Value = "Taiwan", Text = "Taiwan" },
+								new SelectListItem { Value = "Thailand", Text = "Thailand" },
+								new SelectListItem { Value = "South Korea", Text = "South Korea" }
+								}, "-- From --", new { @class = "form-control" })
 					</div>
 				</div>
 				<div class="form-group">
 					@Html.LabelFor(s => s.Destination, new { @class = "col-md-5 control-label" })
 					<div class="col-md-7">
-						@Html.TextBoxFor(s => s.Destination, new { @class = "form-control" })
+						@Html.DropDownListFor(s => s.Destination,
+							new List<SelectListItem> {
+								new SelectListItem { Value = "China", Text = "China" },
+								new SelectListItem { Value = "Hong Kong", Text = "Hong Kong" },
+								new SelectListItem { Value = "India", Text = "India" },
+								new SelectListItem { Value = "Indonesia", Text = "Indonesia" },
+								new SelectListItem { Value = "Japan", Text = "Japan" },
+								new SelectListItem { Value = "Malaysia", Text = "Malaysia" },
+								new SelectListItem { Value = "Singapore", Text = "Singapore" },
+								new SelectListItem { Value = "Taiwan", Text = "Taiwan" },
+								new SelectListItem { Value = "Thailand", Text = "Thailand" },
+								new SelectListItem { Value = "South Korea", Text = "South Korea" }
+							}, "-- To --", new { @class = "form-control" })
 					</div>
 				</div>
 				<div class="form-group">
